@@ -683,11 +683,11 @@ public static class InfluenceRewardMultiplier
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void CalculateInfluenceGain(PartyBase party, float influenceValueOfBattle, float contributionShare, ref ExplainedNumber __result)
+    public static void CalculateInfluenceGain(PartyBase winnerParty, float influenceValueOfBattleForWinnerSide, float contributionShareOfWinnerParty, float influenceMultiplierForWinnerSide, bool includeDescriptions, ref ExplainedNumber __result)
     {
         try
         {
-            if (party.IsPlayerParty() && SettingsManager.InfluenceRewardMultiplier.IsChanged)
+            if (winnerParty.IsPlayerParty() && SettingsManager.InfluenceRewardMultiplier.IsChanged)
             {
                 __result.AddMultiplier(SettingsManager.InfluenceRewardMultiplier.Value);
             }
@@ -1264,11 +1264,11 @@ public static class RenownRewardMultiplierBattle
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void CalculateRenownGain(PartyBase party, float renownValueOfBattle, float contributionShare, ref ExplainedNumber __result)
+    public static void CalculateRenownGain(PartyBase winnerParty, float renownValueOfBattleForWinnerSide, float contributionShareOfWinnerParty, float renownMultiplierForWinnerSide, bool includeDescriptions, ref ExplainedNumber __result)
     {
         try
         {
-            if (party.IsPlayerParty() && SettingsManager.RenownRewardMultiplier.IsChanged)
+            if (winnerParty.IsPlayerParty() && SettingsManager.RenownRewardMultiplier.IsChanged)
             {
                 __result.AddMultiplier(SettingsManager.RenownRewardMultiplier.Value);
             }

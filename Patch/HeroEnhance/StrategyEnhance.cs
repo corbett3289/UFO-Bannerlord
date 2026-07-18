@@ -1,4 +1,5 @@
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -358,15 +359,11 @@ internal class StrategyAttrEnhance
                     bool flag2 = true;
                     while (flag2 && productionProgress >= 1f)
                     {
-                        flag2 = ((workshop.Owner != Hero.MainHero) ? ((bool)tickNotableWorkshop.Invoke(__instance, new object[2]
-                        {
+                        flag2 = InvokeWorkshopProductionCycle(
+                            workshop.Owner != Hero.MainHero ? tickNotableWorkshop : tickPlayerWorkshop,
+                            __instance,
                             workshopType.Productions[i],
-                            workshop
-                        })) : ((bool)tickPlayerWorkshop.Invoke(__instance, new object[2]
-                        {
-                            workshopType.Productions[i],
-                            workshop
-                        })));
+                            workshop);
                         if (flag2)
                         {
                             flag = true;
@@ -662,5 +659,18 @@ internal class StrategyAttrEnhance
     private static readonly MethodInfo tickPlayerWorkshop = typeof(WorkshopsCampaignBehavior).GetMethod("TickOneProductionCycleForPlayerWorkshop", BindingFlags.Instance | BindingFlags.NonPublic);
 
     private static readonly MethodInfo tickNotableWorkshop = typeof(WorkshopsCampaignBehavior).GetMethod("TickOneProductionCycleForNotableWorkshop", BindingFlags.Instance | BindingFlags.NonPublic);
+
+    private static bool InvokeWorkshopProductionCycle(MethodInfo method, WorkshopsCampaignBehavior instance, WorkshopType.Production production, Workshop workshop)
+    {
+        ParameterInfo[] parameters = method.GetParameters();
+        object[] args = parameters.Length switch
+        {
+            2 => new object[] { production, workshop },
+            3 => new object[] { production, workshop, true },
+            _ => throw new TargetParameterCountException($"Unexpected {method.Name} parameter count: {parameters.Length}")
+        };
+
+        return (bool)method.Invoke(instance, args);
+    }
 
 }
