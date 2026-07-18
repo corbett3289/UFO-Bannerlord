@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Local Steam Workshop upload state
+SteamWorkshop/WorkshopCreateLocal.xml
+SteamWorkshop/WorkshopUpdateLocal.xml
+steam_appid.txt
+steam_workshop_uploader.txt
