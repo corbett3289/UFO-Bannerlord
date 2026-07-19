@@ -12,9 +12,20 @@ namespace UFO.Extension
     {
         public static readonly TextObject RaidedText = new TextObject("{=RVas572P}Raided");
 
+        private static Clan PlayerClanOrNull()
+        {
+            return Hero.MainHero?.Clan;
+        }
+
+        private static bool IsPlayerClanMember(Hero hero)
+        {
+            Clan playerClan = PlayerClanOrNull();
+            return hero != null && playerClan != null && hero.Clan == playerClan;
+        }
+
         public static int AgeScale(this Hero hero)
         {
-            if (Game.Current.PlayerTroop == null)
+            if (hero == null || Game.Current?.PlayerTroop == null)
             {
                 return -1;
             }
@@ -22,7 +33,7 @@ namespace UFO.Extension
             {
                 return -1;
             }
-            if (hero.Clan != Clan.PlayerClan)
+            if (!IsPlayerClanMember(hero))
             {
                 return 1;
             }
@@ -79,7 +90,11 @@ namespace UFO.Extension
             {
                 return SettingsManager.CombatAttributeRatePlayer.Value;
             }
-            if (hero.Clan == Clan.PlayerClan)
+            if (PlayerClanOrNull() == null)
+            {
+                return 0f;
+            }
+            if (IsPlayerClanMember(hero))
             {
                 return SettingsManager.CombatAttributeRateClanMember.Value;
             }
@@ -116,7 +131,11 @@ namespace UFO.Extension
             {
                 return SettingsManager.StrategyAttributeRatePlayer.Value;
             }
-            if (hero.Clan == Clan.PlayerClan)
+            if (PlayerClanOrNull() == null)
+            {
+                return 0f;
+            }
+            if (IsPlayerClanMember(hero))
             {
                 return SettingsManager.StrategyAttributeRateClanMember.Value;
             }
@@ -125,20 +144,12 @@ namespace UFO.Extension
 
         public static int EnhanceType(this CharacterObject character)
         {
-            Hero heroObject = character.HeroObject;
-            if (heroObject == null)
+            if (character == null)
             {
                 return -1;
             }
-            if (heroObject == Hero.MainHero)
-            {
-                return 1;
-            }
-            if (heroObject.Clan == Clan.PlayerClan)
-            {
-                return 0;
-            }
-            return 2;
+            Hero heroObject = character.HeroObject;
+            return heroObject.EnhanceType();
         }
 
         public static int EnhanceType(this Hero hero)
@@ -151,7 +162,11 @@ namespace UFO.Extension
             {
                 return 1;
             }
-            if (hero.Clan == Clan.PlayerClan)
+            if (PlayerClanOrNull() == null)
+            {
+                return -1;
+            }
+            if (IsPlayerClanMember(hero))
             {
                 return 0;
             }
