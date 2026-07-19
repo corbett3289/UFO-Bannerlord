@@ -17,6 +17,14 @@ namespace UFO.Extension
             return Hero.MainHero?.Clan;
         }
 
+        private static bool CampaignHeroesReady()
+        {
+            return Campaign.Current != null &&
+                   Hero.MainHero != null &&
+                   PlayerClanOrNull() != null &&
+                   Game.Current?.PlayerTroop != null;
+        }
+
         private static bool IsPlayerClanMember(Hero hero)
         {
             Clan playerClan = PlayerClanOrNull();
@@ -82,17 +90,13 @@ namespace UFO.Extension
 
         public static float CombatEnhanceRate(this Hero hero)
         {
-            if (hero == null)
+            if (hero == null || !CampaignHeroesReady())
             {
                 return 0f;
             }
             if (hero == Hero.MainHero)
             {
                 return SettingsManager.CombatAttributeRatePlayer.Value;
-            }
-            if (PlayerClanOrNull() == null)
-            {
-                return 0f;
             }
             if (IsPlayerClanMember(hero))
             {
@@ -123,17 +127,13 @@ namespace UFO.Extension
 
         public static float StrategyEnhanceRate(this Hero hero)
         {
-            if (hero == null)
+            if (hero == null || !CampaignHeroesReady())
             {
                 return 0f;
             }
             if (hero == Hero.MainHero)
             {
                 return SettingsManager.StrategyAttributeRatePlayer.Value;
-            }
-            if (PlayerClanOrNull() == null)
-            {
-                return 0f;
             }
             if (IsPlayerClanMember(hero))
             {
@@ -154,17 +154,13 @@ namespace UFO.Extension
 
         public static int EnhanceType(this Hero hero)
         {
-            if (hero == null)
+            if (hero == null || !CampaignHeroesReady())
             {
                 return -1;
             }
             if (hero == Hero.MainHero)
             {
                 return 1;
-            }
-            if (PlayerClanOrNull() == null)
-            {
-                return -1;
             }
             if (IsPlayerClanMember(hero))
             {

@@ -482,7 +482,6 @@ For examples please refer to: SandBoxCore/ModuleData/spitems/arm_armors.xml.-->
 			</Weapon>
 		</ItemComponent>
 		<Flags Civilian="true" />
-		<Flag name="BonusAgainstShield" />
 	</Item>
 
 	<Item

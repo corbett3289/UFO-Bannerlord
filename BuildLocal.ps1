@@ -92,5 +92,12 @@ if ($Deploy) {
         Copy-DeployFile (Join-Path $repo "Module\SubModule.xml") (Join-Path $workshopModule "SubModule.xml")
         Copy-DeployFile (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll") (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.dll")
         Copy-DeployFile (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.pdb") (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.pdb")
+
+        $moduleDataSource = Join-Path $repo "Module\ModuleData"
+        $moduleDataDestination = Join-Path $workshopModule "ModuleData"
+        if (Test-Path -LiteralPath $moduleDataSource) {
+            New-Item -ItemType Directory -Force -Path $moduleDataDestination | Out-Null
+            Copy-Item -Path (Join-Path $moduleDataSource "*") -Destination $moduleDataDestination -Recurse -Force
+        }
     }
 }

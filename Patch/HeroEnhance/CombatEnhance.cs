@@ -99,6 +99,11 @@ internal class CombatAttrEnhance
     {
         private static void Postfix(ref ExplainedNumber __result, ref CharacterObject character, ref bool includeDescriptions)
         {
+            if (character?.HeroObject == null)
+            {
+                return;
+            }
+
             float num = character.CombatEnhanceRate();
             if (num != 0f)
             {
