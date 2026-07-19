@@ -8,7 +8,10 @@ $repo = Split-Path -Parent $MyInvocation.MyCommand.Path
 $game = "C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord"
 $framework = "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1"
 $csc = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe"
-$workshopModule = "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\3583201039"
+$workshopModules = @(
+    "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\3583201039",
+    "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\3767139118"
+)
 $output = Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll"
 
 function Add-ManagedDlls($dir, $pattern = "*.dll") {
@@ -20,6 +23,14 @@ function Add-ManagedDlls($dir, $pattern = "*.dll") {
             } catch {
             }
         }
+    }
+}
+
+function Copy-DeployFile($source, $destination) {
+    try {
+        Copy-Item -LiteralPath $source -Destination $destination -Force
+    } catch {
+        Write-Warning "Could not copy $source to $destination. The game or launcher may have the module loaded. $($_.Exception.Message)"
     }
 }
 
@@ -74,7 +85,13 @@ try {
 }
 
 if ($Deploy) {
-    Copy-Item -LiteralPath (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll") -Destination (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.dll") -Force
-    Copy-Item -LiteralPath (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.pdb") -Destination (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.pdb") -Force
-    Copy-Item -LiteralPath (Join-Path $repo "Module\SubModule.xml") -Destination (Join-Path $workshopModule "SubModule.xml") -Force
+    foreach ($workshopModule in $workshopModules) {
+        if (-not (Test-Path -LiteralPath $workshopModule)) {
+            continue
+        }
+        New-Item -ItemType Directory -Force -Path (Join-Path $workshopModule "bin\Win64_Shipping_Client") | Out-Null
+        Copy-DeployFile (Join-Path $repo "Module\SubModule.xml") (Join-Path $workshopModule "SubModule.xml")
+        Copy-DeployFile (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll") (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.dll")
+        Copy-DeployFile (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.pdb") (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.pdb")
+    }
 }
