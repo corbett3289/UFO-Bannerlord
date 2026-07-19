@@ -21,7 +21,13 @@ public static class ClanExperienceMultiplier
     [HarmonyPrefix]
     public static void AddSkillXp(SkillObject skill, ref float rawXp, bool isAffectedByFocusFactor, bool shouldNotify, ref HeroDeveloper __instance)
     {
-        if (__instance.Hero.IsPlayerClan() && !__instance.Hero.IsPlayer() && !__instance.Hero.IsPlayerCompanion() && SettingsManager.ClanExperienceMultiplier.IsChanged)
+        Hero hero = __instance?.Hero;
+        if (hero == null || !hero.IsInitialized)
+        {
+            return;
+        }
+
+        if (hero.IsPlayerClan() && !hero.IsPlayer() && !hero.IsPlayerCompanion() && SettingsManager.ClanExperienceMultiplier.IsChanged)
         {
             rawXp *= SettingsManager.ClanExperienceMultiplier.Value;
         }
@@ -37,7 +43,13 @@ public static class CompanionExperienceMultiplier
     [HarmonyPrefix]
     public static void AddSkillXp(SkillObject skill, ref float rawXp, bool isAffectedByFocusFactor, bool shouldNotify, ref HeroDeveloper __instance)
     {
-        if (__instance.Hero.IsPlayerCompanion() && SettingsManager.CompanionExperienceMultiplier.IsChanged)
+        Hero hero = __instance?.Hero;
+        if (hero == null || !hero.IsInitialized)
+        {
+            return;
+        }
+
+        if (hero.IsPlayerCompanion() && SettingsManager.CompanionExperienceMultiplier.IsChanged)
         {
             rawXp *= SettingsManager.CompanionExperienceMultiplier.Value;
         }
@@ -88,7 +100,13 @@ public static class ExperienceMultiplier
     [HarmonyPrefix]
     public static void AddSkillXp(SkillObject skill, ref float rawXp, bool isAffectedByFocusFactor, bool shouldNotify, ref HeroDeveloper __instance)
     {
-        if (__instance.Hero.IsPlayer() && SettingsManager.ExperienceMultiplier.IsChanged)
+        Hero hero = __instance?.Hero;
+        if (hero == null || !hero.IsInitialized)
+        {
+            return;
+        }
+
+        if (hero.IsPlayer() && SettingsManager.ExperienceMultiplier.IsChanged)
         {
             rawXp *= SettingsManager.ExperienceMultiplier.Value;
         }

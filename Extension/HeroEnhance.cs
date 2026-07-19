@@ -22,6 +22,11 @@ namespace UFO.Extension
             return SubModule.CampaignReady;
         }
 
+        private static bool IsHeroReady(Hero hero)
+        {
+            return CampaignHeroesReady() && hero != null && hero.IsInitialized;
+        }
+
         private static bool IsPlayerClanMember(Hero hero)
         {
             Clan playerClan = PlayerClanOrNull();
@@ -87,7 +92,7 @@ namespace UFO.Extension
 
         public static float CombatEnhanceRate(this Hero hero)
         {
-            if (hero == null || !CampaignHeroesReady())
+            if (!IsHeroReady(hero))
             {
                 return 0f;
             }
@@ -124,7 +129,7 @@ namespace UFO.Extension
 
         public static float StrategyEnhanceRate(this Hero hero)
         {
-            if (hero == null || !CampaignHeroesReady())
+            if (!IsHeroReady(hero))
             {
                 return 0f;
             }
@@ -151,7 +156,7 @@ namespace UFO.Extension
 
         public static int EnhanceType(this Hero hero)
         {
-            if (hero == null || !CampaignHeroesReady())
+            if (!IsHeroReady(hero))
             {
                 return -1;
             }

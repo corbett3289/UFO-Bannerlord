@@ -99,15 +99,15 @@ internal class CombatAttrEnhance
     {
         private static void Postfix(ref ExplainedNumber __result, ref CharacterObject character, ref bool includeDescriptions)
         {
-            if (character?.HeroObject == null)
+            Hero heroObject = character?.HeroObject;
+            if (heroObject == null || !heroObject.IsInitialized)
             {
                 return;
             }
 
-            float num = character.CombatEnhanceRate();
+            float num = heroObject.CombatEnhanceRate();
             if (num != 0f)
             {
-                Hero heroObject = character.HeroObject;
                 int attributeValue = heroObject.GetAttributeValue(DefaultCharacterAttributes.Endurance);
                 float value = (float)attributeValue * SettingsManager.EnduranceHpAddPercent.Value * num;
                 __result.AddFactor(value, DefaultCharacterAttributes.Endurance.Name);

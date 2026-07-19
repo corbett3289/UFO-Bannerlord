@@ -85,7 +85,7 @@ internal class MiscPatchs
     {
         private static bool Prefix(ref Hero __instance, CampaignTime birthday)
         {
-            if (!SettingsManager.EnableEverYoung.Value)
+            if (!UFO.SubModule.CampaignReady || __instance == null || !__instance.IsInitialized || !SettingsManager.EnableEverYoung.Value)
             {
                 return true;
             }
@@ -114,7 +114,7 @@ internal class MiscPatchs
     {
         private static bool Prefix(ref Hero __instance, ref float __result)
         {
-            if (!SettingsManager.EnableEverYoung.Value)
+            if (!UFO.SubModule.CampaignReady || __instance == null || !__instance.IsInitialized || !SettingsManager.EnableEverYoung.Value)
             {
                 return true;
             }
@@ -178,7 +178,7 @@ internal class MiscPatchs
     {
         private static bool Prefix(ref CharacterObject __instance, ref int __result)
         {
-            if (!SettingsManager.EnableEverYoung.Value)
+            if (!UFO.SubModule.CampaignReady || __instance == null || !SettingsManager.EnableEverYoung.Value)
             {
                 return true;
             }
@@ -186,7 +186,14 @@ internal class MiscPatchs
             {
                 return true;
             }
-            if (!__instance.HeroObject.IsWanderer)
+
+            Hero hero = __instance.HeroObject;
+            if (hero == null || !hero.IsInitialized)
+            {
+                return true;
+            }
+
+            if (!hero.IsWanderer)
             {
                 __result = 0;
             }

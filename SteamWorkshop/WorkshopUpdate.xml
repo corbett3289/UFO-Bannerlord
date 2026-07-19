@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="v1.0.5 compatibility update for Bannerlord v1.4.7 / War Sails. Defers UFO Harmony patches until StoryMode has completed hero initialization and removes them when a campaign ends, preventing new-campaign native crashes from inherited or prematurely active hero hooks." />
+		<ChangeNotes Value="v1.0.6 compatibility update for Bannerlord v1.4.7 / War Sails. Hero enhancement patches now preserve vanilla behavior for each hero until that hero is fully initialized, preventing native crashes while StoryMode creates post-tutorial notables." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />

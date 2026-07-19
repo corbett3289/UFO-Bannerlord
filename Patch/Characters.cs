@@ -216,6 +216,11 @@ public static class PR
     {
         try
         {
+            if (__instance == null || otherHero == null || !__instance.IsInitialized || !otherHero.IsInitialized)
+            {
+                return;
+            }
+
             if ((__instance.IsPlayer() || otherHero.IsPlayer()) && SettingsManager.PerfectRelationships.IsChanged)
             {
                 __result = 100;
