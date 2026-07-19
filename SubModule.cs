@@ -21,6 +21,9 @@ namespace UFO;
 internal class SubModule : MBSubModuleBase
 {
     private bool PatchesApplied = false;
+    private Harmony patcher;
+
+    internal static bool CampaignReady { get; private set; }
 
     protected override void OnSubModuleLoad()
     {
@@ -36,6 +39,7 @@ internal class SubModule : MBSubModuleBase
     protected override void OnGameStart(Game game, IGameStarter gameStarterObject)
     {
         base.OnGameStart(game, gameStarterObject);
+        CampaignReady = false;
 
         if (game.GameType is Campaign)
         {
@@ -59,21 +63,41 @@ internal class SubModule : MBSubModuleBase
     public override void OnGameInitializationFinished(Game game)
     {
         base.OnGameInitializationFinished(game);
+    }
+
+    public override void OnAfterGameInitializationFinished(Game game, object starterObject)
+    {
+        base.OnAfterGameInitializationFinished(game, starterObject);
 
         if (!(game.GameType is Campaign) || PatchesApplied)
         {
             return;
         }
 
-        Harmony patcher = new Harmony("UFO");
+        patcher = new Harmony("UFO");
 
         //UNPATCH(patcher);
 
         PATCH(patcher, ref PatchesApplied);
+        CampaignReady = true;
 
         //PatchInspector.PatchInformation();
 
         //InformationManager.DisplayMessage(new InformationMessage("UFO's Mod Patch Applied", Colors.Green));
+    }
+
+    public override void OnGameEnd(Game game)
+    {
+        CampaignReady = false;
+
+        if (PatchesApplied)
+        {
+            (patcher ?? new Harmony("UFO")).UnpatchAll("UFO");
+            PatchesApplied = false;
+            patcher = null;
+        }
+
+        base.OnGameEnd(game);
     }
 
     // Utils

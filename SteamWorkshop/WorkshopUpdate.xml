@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="v1.0.4 compatibility update for Bannerlord v1.4.7 / War Sails. Prevents UFO hero-enhancement hooks from running before StoryMode finishes creating the player clan, adds defensive hit-point handling, and removes a rejected legacy arrow XML flag." />
+		<ChangeNotes Value="v1.0.5 compatibility update for Bannerlord v1.4.7 / War Sails. Defers UFO Harmony patches until StoryMode has completed hero initialization and removes them when a campaign ends, preventing new-campaign native crashes from inherited or prematurely active hero hooks." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />

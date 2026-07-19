@@ -19,10 +19,7 @@ namespace UFO.Extension
 
         private static bool CampaignHeroesReady()
         {
-            return Campaign.Current != null &&
-                   Hero.MainHero != null &&
-                   PlayerClanOrNull() != null &&
-                   Game.Current?.PlayerTroop != null;
+            return SubModule.CampaignReady;
         }
 
         private static bool IsPlayerClanMember(Hero hero)
