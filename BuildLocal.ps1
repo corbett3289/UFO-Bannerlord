@@ -9,7 +9,6 @@ $game = "C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlo
 $framework = "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1"
 $csc = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe"
 $workshopModules = @(
-    "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\3583201039",
     "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\3767139118"
 )
 $output = Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll"
