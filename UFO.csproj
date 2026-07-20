@@ -67,12 +67,6 @@
 			<HintPath>%(Identity)</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="$(GameFolder)\Modules\NavalDLC\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-
-
 		<!--Shokuho-->
 		<!--
 		<Reference Include="E:\SteamLibrary\steamapps\workshop\content\261550\3496296180\bin\Win64_Shipping_Client\*.dll">
@@ -115,8 +109,8 @@
 			<FilesToCopy Include="$(OutPutPath)\*.*" />
 		</ItemGroup>
 		
-		<Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(GameFolder)\Modules\UFO\bin\Win64_Shipping_Client\" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="Module\SubModule.xml" DestinationFolder="$(GameFolder)\Modules\UFO\" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(GameFolder)\Modules\UFONoWarSails\bin\Win64_Shipping_Client\" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="Module\SubModule.xml" DestinationFolder="$(GameFolder)\Modules\UFONoWarSails\" SkipUnchangedFiles="true" />
 	</Target>
 
 </Project>

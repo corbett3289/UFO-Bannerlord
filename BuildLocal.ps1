@@ -8,10 +8,8 @@ $repo = Split-Path -Parent $MyInvocation.MyCommand.Path
 $game = "C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord"
 $framework = "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1"
 $csc = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe"
-$workshopModules = @(
-    "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\3767139118"
-)
 $output = Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll"
+$deployModule = Join-Path $game "Modules\UFONoWarSails"
 
 function Add-ManagedDlls($dir, $pattern = "*.dll") {
     if (Test-Path -LiteralPath $dir) {
@@ -43,7 +41,7 @@ $gameBin = Join-Path $game "bin\Win64_Shipping_Client"
 $refFiles += Add-ManagedDlls $gameBin "TaleWorlds*.dll" | Where-Object { [IO.Path]::GetFileName($_) -ne "TaleWorlds.Native.dll" }
 $refFiles += Join-Path $gameBin "Newtonsoft.Json.dll"
 
-foreach ($module in @("Native", "SandBox", "SandBoxCore", "StoryMode", "CustomBattle", "BirthAndDeath", "NavalDLC", "Bannerlord.Harmony", "Bannerlord.UIExtenderEx")) {
+foreach ($module in @("Native", "SandBox", "SandBoxCore", "StoryMode", "CustomBattle", "BirthAndDeath", "Bannerlord.Harmony", "Bannerlord.UIExtenderEx")) {
     $dir = Join-Path $game "Modules\$module\bin\Win64_Shipping_Client"
     $refFiles += Add-ManagedDlls $dir | Where-Object {
         [IO.Path]::GetFileName($_) -notmatch "^(System|Microsoft)\." -and
@@ -77,27 +75,19 @@ $args = @(
 ) + $refs + $sources
 
 $args | Set-Content -LiteralPath $rsp -Encoding ASCII
+$compilerExitCode = 0
 try {
     & $csc ("@" + $rsp)
+    $compilerExitCode = $LASTEXITCODE
 } finally {
     Remove-Item -LiteralPath $rsp -Force -ErrorAction SilentlyContinue
 }
 
-if ($Deploy) {
-    foreach ($workshopModule in $workshopModules) {
-        if (-not (Test-Path -LiteralPath $workshopModule)) {
-            continue
-        }
-        New-Item -ItemType Directory -Force -Path (Join-Path $workshopModule "bin\Win64_Shipping_Client") | Out-Null
-        Copy-DeployFile (Join-Path $repo "Module\SubModule.xml") (Join-Path $workshopModule "SubModule.xml")
-        Copy-DeployFile (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll") (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.dll")
-        Copy-DeployFile (Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.pdb") (Join-Path $workshopModule "bin\Win64_Shipping_Client\UFO.pdb")
+if ($compilerExitCode -ne 0) {
+    throw "C# compilation failed with exit code $compilerExitCode."
+}
 
-        $moduleDataSource = Join-Path $repo "Module\ModuleData"
-        $moduleDataDestination = Join-Path $workshopModule "ModuleData"
-        if (Test-Path -LiteralPath $moduleDataSource) {
-            New-Item -ItemType Directory -Force -Path $moduleDataDestination | Out-Null
-            Copy-Item -Path (Join-Path $moduleDataSource "*") -Destination $moduleDataDestination -Recurse -Force
-        }
-    }
+if ($Deploy) {
+    New-Item -ItemType Directory -Force -Path $deployModule | Out-Null
+    Copy-Item -Path (Join-Path $repo "Module\*") -Destination $deployModule -Recurse -Force
 }
