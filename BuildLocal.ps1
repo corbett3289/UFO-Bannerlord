@@ -23,14 +23,6 @@ function Add-ManagedDlls($dir, $pattern = "*.dll") {
     }
 }
 
-function Copy-DeployFile($source, $destination) {
-    try {
-        Copy-Item -LiteralPath $source -Destination $destination -Force
-    } catch {
-        Write-Warning "Could not copy $source to $destination. The game or launcher may have the module loaded. $($_.Exception.Message)"
-    }
-}
-
 New-Item -ItemType Directory -Force -Path (Split-Path $output) | Out-Null
 
 $refFiles = @()
