@@ -1,8 +1,10 @@
 using MCM.Abstractions.Base.PerCampaign;
+using MCM.Abstractions.Base.Global;
 using MCM.Common;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
+using UFO.Extension;
 using UFO.Localization;
 
 namespace UFO.Setting;
@@ -30,6 +32,17 @@ public class BannerlordCheatsPerCampaignSettings : AttributePerCampaignSettings<
 
     public BannerlordCheatsPerCampaignSettings()
     {
+        BannerlordCheatsGlobalSettings global =
+            GlobalSettings<BannerlordCheatsGlobalSettings>.Instance;
+        if (global != null)
+        {
+            OneHitKill = global.OneHitKill;
+            PartyOneHitKill = global.PartyOneHitKill;
+            AutoChoosePerk =
+                LocalizedDropdownValue<AutoChoosePerk_Type>.GenerateDropdown(
+                    global.AutoChoosePerk.GetValue());
+        }
+
         string text;
         try
         {

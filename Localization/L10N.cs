@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Xml;
 using System.Xml.Linq;
 using UFO.Setting;
 
@@ -50,24 +52,80 @@ public static class L10N
         public const string WorkshopsGroupName = "Workshops";
     }
 
-    private static Dictionary<string, string> Values;
+    private static Dictionary<string, string> Values = new Dictionary<string, string>();
 
     public static void LoadLanguage()
     {
-        string LangFile = EnumExtensions.ToLanguage(SettingsManager.LanguageSetting.Value);
-        Values = new Dictionary<string, string>();
-        string uri = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), LangFile);
-        XDocument xDocument = XDocument.Load(uri);
-        XElement xElement = xDocument.Element("root");
-        IEnumerable<XElement> enumerable = xElement.Descendants("data");
-        foreach (XElement item in enumerable)
+        string moduleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string selectedLanguage = EnumExtensions.ToLanguage(SettingsManager.LanguageSetting.Value);
+        string[] candidates = { selectedLanguage, "English.resx", "Other.resx" };
+        HashSet<string> attemptedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string candidate in candidates)
         {
-            string value = item.Attribute("name").Value;
-            string value2 = item.Element("value").Value;
-            if (!string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(value2))
+            if (!attemptedFiles.Add(candidate))
             {
-                Values.Add(value, value2);
+                continue;
             }
+
+            string path = Path.Combine(moduleDirectory, candidate);
+            if (TryLoadLanguageFile(path, out Dictionary<string, string> loadedValues))
+            {
+                Values = loadedValues;
+                return;
+            }
+        }
+
+        Values = new Dictionary<string, string>();
+    }
+
+    private static bool TryLoadLanguageFile(string path, out Dictionary<string, string> loadedValues)
+    {
+        loadedValues = null;
+        if (!File.Exists(path))
+        {
+            return false;
+        }
+
+        try
+        {
+            XDocument document = XDocument.Load(path);
+            XElement root = document.Root;
+            if (root == null)
+            {
+                return false;
+            }
+
+            Dictionary<string, string> parsedValues = new Dictionary<string, string>();
+            foreach (XElement item in root.Descendants("data"))
+            {
+                string key = item.Attribute("name")?.Value;
+                string text = item.Element("value")?.Value;
+                if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(text))
+                {
+                    parsedValues[key] = text;
+                }
+            }
+
+            if (parsedValues.Count == 0)
+            {
+                return false;
+            }
+
+            loadedValues = parsedValues;
+            return true;
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return false;
+        }
+        catch (XmlException)
+        {
+            return false;
         }
     }
 

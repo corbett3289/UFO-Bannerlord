@@ -328,7 +328,7 @@ public static class EDP_S
 
 public static class EnemyLordsKnockoutOrKilled
 {
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
         try
         {
@@ -356,9 +356,9 @@ public static class EnemyLordsKnockoutOrKilled_Default
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
-        EnemyLordsKnockoutOrKilled.GetAgentStateProbability(affectorAgent, effectedAgent, damageType, useSurgeryProbability, ref __result);
+        EnemyLordsKnockoutOrKilled.GetAgentStateProbability(effectedAgent, ref __result);
     }
 }
 
@@ -368,9 +368,9 @@ public static class EnemyLordsKnockoutOrKilled_Sandbox
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
-        EnemyLordsKnockoutOrKilled.GetAgentStateProbability(affectorAgent, effectedAgent, damageType, useSurgeryProbability, ref __result);
+        EnemyLordsKnockoutOrKilled.GetAgentStateProbability(effectedAgent, ref __result);
     }
 }
 
@@ -379,16 +379,16 @@ public static class EnemyLordsKnockoutOrKilled_StoryMode
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
-        EnemyLordsKnockoutOrKilled.GetAgentStateProbability(affectorAgent, effectedAgent, damageType, useSurgeryProbability, ref __result);
+        EnemyLordsKnockoutOrKilled.GetAgentStateProbability(effectedAgent, ref __result);
     }
 }
 
 
 public static class EnemyTroopsKnockoutOrKilled
 {
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
         try
         {
@@ -396,7 +396,7 @@ public static class EnemyTroopsKnockoutOrKilled
             {
                 if (SettingsManager.EnemyTroopsKnockoutOrKilled.Value == KnockoutOrKilled.Killed)
                 {
-                    __result = 1f;
+                    __result = ShouldPreserveLastLordlessTroop(effectedAgent) ? 0f : 1f;
                 }
                 else if (SettingsManager.EnemyTroopsKnockoutOrKilled.Value == KnockoutOrKilled.Knockout)
                 {
@@ -409,6 +409,41 @@ public static class EnemyTroopsKnockoutOrKilled
             SubModule.LogError(e, typeof(EnemyTroopsKnockoutOrKilled));
         }
     }
+
+    private static bool ShouldPreserveLastLordlessTroop(Agent effectedAgent)
+    {
+        if (!effectedAgent.Origin.TryGetParty(out PartyBase party) ||
+            party.LeaderHero != null ||
+            effectedAgent.Team == null)
+        {
+            return false;
+        }
+
+        int otherActivePartyTroops = effectedAgent.Team.ActiveAgents.Count(agent =>
+            agent != null &&
+            agent != effectedAgent &&
+            agent.Health > 0f &&
+            agent.Origin.TryGetParty(out PartyBase otherParty) &&
+            otherParty == party);
+
+        return ShouldForceKnockoutForLordlessParty(
+            forceKilled: true,
+            isHero: effectedAgent.IsHero,
+            hasLeaderHero: false,
+            otherActivePartyTroops);
+    }
+
+    internal static bool ShouldForceKnockoutForLordlessParty(
+        bool forceKilled,
+        bool isHero,
+        bool hasLeaderHero,
+        int otherActivePartyTroops)
+    {
+        return forceKilled &&
+            !isHero &&
+            !hasLeaderHero &&
+            otherActivePartyTroops <= 0;
+    }
 }
 
 
@@ -417,9 +452,9 @@ public static class EnemyTroopsKnockoutOrKilled_Default
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
-        EnemyTroopsKnockoutOrKilled.GetAgentStateProbability(affectorAgent, effectedAgent, damageType, useSurgeryProbability, ref __result);
+        EnemyTroopsKnockoutOrKilled.GetAgentStateProbability(effectedAgent, ref __result);
     }
 }
 
@@ -428,9 +463,9 @@ public static class EnemyTroopsKnockoutOrKilled_Sandbox
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
-        EnemyTroopsKnockoutOrKilled.GetAgentStateProbability(affectorAgent, effectedAgent, damageType, useSurgeryProbability, ref __result);
+        EnemyTroopsKnockoutOrKilled.GetAgentStateProbability(effectedAgent, ref __result);
     }
 }
 
@@ -440,9 +475,9 @@ public static class EnemyTroopsKnockoutOrKilled_StoryMode
 {
     [UsedImplicitly]
     [HarmonyPostfix]
-    public static void GetAgentStateProbability(Agent affectorAgent, Agent effectedAgent, DamageTypes damageType, float useSurgeryProbability, ref float __result)
+    public static void GetAgentStateProbability(Agent effectedAgent, ref float __result)
     {
-        EnemyTroopsKnockoutOrKilled.GetAgentStateProbability(affectorAgent, effectedAgent, damageType, useSurgeryProbability, ref __result);
+        EnemyTroopsKnockoutOrKilled.GetAgentStateProbability(effectedAgent, ref __result);
     }
 }
 

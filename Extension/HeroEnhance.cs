@@ -173,30 +173,40 @@ namespace UFO.Extension
 
         public static void AddBothBranchPerks(this Hero hero)
         {
-            if (!hero.IsAlive)
+            if (!IsHeroReady(hero) || !hero.IsAlive || hero.HeroDeveloper == null)
             {
                 return;
             }
 
-            if ((int)SettingsManager.AutoChoosePerk.Value != hero.EnhanceType())
+            if (!ShouldAddBothBranchPerks(SettingsManager.AutoChoosePerk.Value, hero.EnhanceType()))
             {
-                if (hero.EnhanceType() == 1 && (int)SettingsManager.AutoChoosePerk.Value == 0)
-                {
-                }
-                else
-                {
-                    return;
-                }
+                return;
             }
-
 
             foreach (PerkObject item in PerkObject.All)
             {
                 SkillObject skill = item.Skill;
-                if (hero.GetSkillValue(skill) >= item.RequiredSkillValue && !hero.GetPerkValue(item))
+                if (skill != null &&
+                    hero.GetSkillValue(skill) >= item.RequiredSkillValue &&
+                    !hero.GetPerkValue(item))
                 {
                     hero.HeroDeveloper.AddPerk(item);
                 }
+            }
+        }
+
+        internal static bool ShouldAddBothBranchPerks(AutoChoosePerk_Type scope, int heroType)
+        {
+            switch (scope)
+            {
+                case AutoChoosePerk_Type.Clan:
+                    return heroType == 0 || heroType == 1;
+                case AutoChoosePerk_Type.Player:
+                    return heroType == 1;
+                case AutoChoosePerk_Type.All:
+                    return heroType >= 0;
+                default:
+                    return false;
             }
         }
 

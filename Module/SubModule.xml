@@ -3,7 +3,7 @@
 	xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
 	<Id value="UFO" />
 	<Name value="UFO's Cheat Mods Bundle [1.4.7]" />
-	<Version value="v1.0.6" />
+	<Version value="v1.0.10" />
 	<DefaultModule value="false" />
 	<ModuleCategory value="Singleplayer" />
 	<ModuleType value="Community" />

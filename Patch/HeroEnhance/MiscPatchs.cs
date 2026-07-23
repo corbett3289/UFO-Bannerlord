@@ -214,10 +214,10 @@ internal class MiscPatchs
         }
     }
 
-    [HarmonyPatch(typeof(AgingCampaignBehavior), "DailyTickHero")]
+    [HarmonyPatch(typeof(CampaignEvents), "DailyTickHero", new Type[] { typeof(Hero) })]
     internal class DailyTickHeroPostfixPatch
     {
-        private static void Postfix(ref AgingCampaignBehavior __instance, ref Hero hero)
+        private static void Postfix(Hero hero)
         {
             hero.AddBothBranchPerks();
             /*

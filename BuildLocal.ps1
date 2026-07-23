@@ -79,6 +79,9 @@ $args = @(
 $args | Set-Content -LiteralPath $rsp -Encoding ASCII
 try {
     & $csc ("@" + $rsp)
+    if ($LASTEXITCODE -ne 0) {
+        throw "C# compilation failed with exit code $LASTEXITCODE."
+    }
 } finally {
     Remove-Item -LiteralPath $rsp -Force -ErrorAction SilentlyContinue
 }
