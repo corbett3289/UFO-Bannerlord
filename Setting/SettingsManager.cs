@@ -438,6 +438,29 @@ public static class SettingsManager
         return new CheatValue<bool>(false, false);
     }
 
+    private static CheatValue<bool> GetAuthoritativeCampaignBoolValue(
+        Func<BannerlordCheatsPerCampaignSettings, bool> perCampaignGetter,
+        Func<BannerlordCheatsGlobalSettings, bool> globalGetter)
+    {
+        if (IsPerCampaignInstanceLoaded)
+        {
+            bool value = perCampaignGetter(PerCampaignInstance);
+            return ResolveAuthoritativeCampaignBool(true, value, false);
+        }
+
+        bool globalValue = globalGetter(GlobalInstance);
+        return ResolveAuthoritativeCampaignBool(false, false, globalValue);
+    }
+
+    private static CheatValue<bool> ResolveAuthoritativeCampaignBool(
+        bool isCampaignLoaded,
+        bool campaignValue,
+        bool globalValue)
+    {
+        bool value = isCampaignLoaded ? campaignValue : globalValue;
+        return new CheatValue<bool>(value, value);
+    }
+
     private static CheatValue<int> GetIntValue(Func<BannerlordCheatsPerCampaignSettings, int> perCampaignGetter,
                                                 Func<BannerlordCheatsGlobalSettings, int> globalGetter,
                                                 int defaultValue)
@@ -509,7 +532,7 @@ public static class SettingsManager
         GetBoolValue(s => s.PlayerHorseInvincible, s => s.PlayerHorseInvincible);
 
     public static CheatValue<bool> OneHitKill => 
-        GetBoolValue(s => s.OneHitKill, s => s.OneHitKill);
+        GetAuthoritativeCampaignBoolValue(s => s.OneHitKill, s => s.OneHitKill);
 
     public static CheatValue<bool> SliceThroughEveryone => 
         GetBoolValue(s => s.SliceThroughEveryone, s => s.SliceThroughEveryone);
@@ -557,7 +580,7 @@ public static class SettingsManager
         GetFloatValue(s => s.PartyDamageTakenPercentage, s => s.PartyDamageTakenPercentage, 100f);
 
     public static CheatValue<bool> PartyOneHitKill => 
-        GetBoolValue(s => s.PartyOneHitKill, s => s.PartyOneHitKill);
+        GetAuthoritativeCampaignBoolValue(s => s.PartyOneHitKill, s => s.PartyOneHitKill);
 
     public static CheatValue<bool> NoRunningAway => 
         GetBoolValue(s => s.NoRunningAway, s => s.NoRunningAway);

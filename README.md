@@ -25,4 +25,9 @@ I want to give full credit to the original authors of the mods.
 - [Maintained War Sails edition](https://steamcommunity.com/sharedfiles/filedetails/?id=3767139118)
 
 # Language Support
-- Russian: [MaG3ro](https://steamcommunity.com/id/MaG3ro)
+- Bundled by this fork: English, Chinese, and a generic fallback.
+- Russian and Portuguese community localization files are not bundled, maintained, supported, or playtested by this fork.
+- Missing or invalid selected language files fall back to bundled English as of v1.0.7. Original Russian translation credit: [MaG3ro](https://steamcommunity.com/id/MaG3ro).
+
+# Setting Fixes
+- As of v1.0.8, disabling `One Hit Kill` or `Party One Hit Kill` in a campaign overrides an older enabled Global value. New campaigns still inherit the Global defaults.
