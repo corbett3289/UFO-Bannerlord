@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="v1.0.10 adds a safety fix for Enemy Troops Knocked Out or Killed set to Killed. Lordless parties such as bandits now retain one unconscious survivor instead of reaching an all-dead roster that can crash Bannerlord during post-battle cleanup. Mortality patches are also aligned with the Bannerlord v1.4.7 model API." />
+		<ChangeNotes Value="v1.0.11 fixes Max Attribute Limit on Bannerlord v1.4.7. UFO now registers its character-development model through the current game API, allowing configured attribute limits above the vanilla cap to take effect after restarting the game." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />

@@ -246,23 +246,14 @@ internal class SubModule : MBSubModuleBase
 
     protected void ReplaceModel<TBaseType, TChildType>(IGameStarter gameStarterObject) where TBaseType : GameModel where TChildType : TBaseType
     {
-        if (!(gameStarterObject.Models is IList<GameModel> models))
+        if (gameStarterObject.Models.OfType<TChildType>().Any())
         {
             return;
         }
-        bool found = false;
-        for (int index = 0; index < models.Count; index++)
-        {
-            if (models[index] is TBaseType)
-            {
-                found = true;
-                models[index] = Activator.CreateInstance<TChildType>();
-            }
-        }
-        if (!found)
-        {
-            gameStarterObject.AddModel(Activator.CreateInstance<TChildType>());
-        }
+
+        // Bannerlord 1.4.7 exposes Models as IEnumerable. Registering a later
+        // model is the supported way to override the model already in the list.
+        gameStarterObject.AddModel(Activator.CreateInstance<TChildType>());
     }
 
 }
