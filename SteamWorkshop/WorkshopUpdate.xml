@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="v1.0.11 fixes Max Attribute Limit on Bannerlord v1.4.7. UFO now registers its character-development model through the current game API, allowing configured attribute limits above the vanilla cap to take effect after restarting the game." />
+		<ChangeNotes Value="v1.0.12 restores player and companion learning-rate multipliers on Bannerlord v1.4.7, makes player experience detection use the active main hero, and fixes Get Both Perks through supported campaign events. Eligible perks are granted on the next daily tick and immediately after a perk is opened." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />

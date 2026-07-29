@@ -214,35 +214,6 @@ internal class MiscPatchs
         }
     }
 
-    [HarmonyPatch(typeof(CampaignEvents), "DailyTickHero", new Type[] { typeof(Hero) })]
-    internal class DailyTickHeroPostfixPatch
-    {
-        private static void Postfix(Hero hero)
-        {
-            hero.AddBothBranchPerks();
-            /*
-            if (!SettingsManager.EnableDailyGainXp.Value)
-            {
-                return;
-            }
-            MethodInfo method = typeof(HeroDeveloper).GetMethod("GainRawXp", BindingFlags.Instance | BindingFlags.NonPublic);
-            int attributeValue = hero.GetAttributeValue(DefaultCharacterAttributes.Intelligence);
-            try
-            {
-                method.Invoke(hero.HeroDeveloper, new object[2]
-                {
-                    hero.Level * attributeValue * attributeValue * 2,
-                    true
-                });
-            }
-            catch (Exception)
-            {
-            }
-
-            */
-        }
-    }
-
     /*
     [HarmonyPatch(typeof(CraftingCampaignBehavior), "HourlyTick")]
     internal class HourlyTickPostfixPatch

@@ -46,6 +46,7 @@ internal class SubModule : MBSubModuleBase
             CampaignGameStarter starter = (CampaignGameStarter)gameStarterObject;
             starter.AddBehavior(Activator.CreateInstance<SavingWeaponProperties.CustomBehavior>());
             starter.AddBehavior(Activator.CreateInstance<AddMoney>());
+            starter.AddBehavior(Activator.CreateInstance<AutoChoosePerks>());
 
             ReplaceModel<DefaultCharacterDevelopmentModel, ModifiedCharacterDevelopmentModel>(gameStarterObject);
         }
