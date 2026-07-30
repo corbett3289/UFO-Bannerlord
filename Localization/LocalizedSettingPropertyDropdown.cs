@@ -1,4 +1,5 @@
 using MCM.Abstractions;
+using System;
 
 namespace UFO.Localization
 {
@@ -15,7 +16,7 @@ namespace UFO.Localization
         public LocalizedSettingPropertyDropdown(string settingName, object defaultIndex)
             : base(settingName)
         {
-            SelectedIndex = (int)defaultIndex;
+            SelectedIndex = Convert.ToInt32(defaultIndex);
         }
     }
 }

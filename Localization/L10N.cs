@@ -9,6 +9,8 @@ using UFO.Setting;
 
 public static class L10N
 {
+    private static readonly object SyncRoot = new object();
+
     public static class Keys
     {
         public const string Global = "Global";
@@ -53,30 +55,68 @@ public static class L10N
     }
 
     private static Dictionary<string, string> Values = new Dictionary<string, string>();
+    private static bool FallbackLoadAttempted;
 
     public static void LoadLanguage()
     {
+        Setting_Language language = Setting_Language.English;
+        try
+        {
+            language = SettingsManager.LanguageSetting.Value;
+        }
+        catch
+        {
+            // MCM can request settings metadata before its global instance exists.
+        }
+
+        LoadLanguageFiles(EnumExtensions.ToLanguage(language), "English.resx", "Other.resx");
+    }
+
+    private static void EnsureLanguageLoaded()
+    {
+        if (Values.Count > 0 || FallbackLoadAttempted)
+        {
+            return;
+        }
+
+        lock (SyncRoot)
+        {
+            if (Values.Count > 0 || FallbackLoadAttempted)
+            {
+                return;
+            }
+
+            FallbackLoadAttempted = true;
+            LoadLanguageFiles("English.resx", "Other.resx");
+        }
+    }
+
+    private static void LoadLanguageFiles(params string[] candidates)
+    {
         string moduleDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        string selectedLanguage = EnumExtensions.ToLanguage(SettingsManager.LanguageSetting.Value);
-        string[] candidates = { selectedLanguage, "English.resx", "Other.resx" };
+        if (string.IsNullOrEmpty(moduleDirectory))
+        {
+            return;
+        }
+
         HashSet<string> attemptedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> loadedValues = null;
 
         foreach (string candidate in candidates)
         {
-            if (!attemptedFiles.Add(candidate))
+            if (!string.IsNullOrEmpty(candidate) &&
+                attemptedFiles.Add(candidate) &&
+                TryLoadLanguageFile(Path.Combine(moduleDirectory, candidate), out loadedValues))
             {
-                continue;
-            }
-
-            string path = Path.Combine(moduleDirectory, candidate);
-            if (TryLoadLanguageFile(path, out Dictionary<string, string> loadedValues))
-            {
-                Values = loadedValues;
-                return;
+                break;
             }
         }
 
-        Values = new Dictionary<string, string>();
+        lock (SyncRoot)
+        {
+            FallbackLoadAttempted = true;
+            Values = loadedValues ?? new Dictionary<string, string>();
+        }
     }
 
     private static bool TryLoadLanguageFile(string path, out Dictionary<string, string> loadedValues)
@@ -131,12 +171,14 @@ public static class L10N
 
     public static string GetText(string key)
     {
+        EnsureLanguageLoaded();
         string value;
         return Values.TryGetValue(key, out value) ? value : key;
     }
 
     public static string GetTextFormat(string key, params object[] formatValues)
     {
+        EnsureLanguageLoaded();
         if (!Values.TryGetValue(key, out var value))
         {
             return key;
