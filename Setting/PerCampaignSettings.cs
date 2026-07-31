@@ -4,6 +4,7 @@ using MCM.Common;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using TaleWorlds.CampaignSystem;
+using UFO.Extension;
 using UFO.Localization;
 
 namespace UFO.Setting;
@@ -37,6 +38,9 @@ public class BannerlordCheatsPerCampaignSettings : AttributePerCampaignSettings<
         {
             OneHitKill = global.OneHitKill;
             PartyOneHitKill = global.PartyOneHitKill;
+            AutoChoosePerk =
+                LocalizedDropdownValue<AutoChoosePerk_Type>.GenerateDropdown(
+                    global.AutoChoosePerk.GetValue());
         }
 
         string text;

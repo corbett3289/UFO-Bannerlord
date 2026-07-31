@@ -27,7 +27,7 @@ public static class ClanExperienceMultiplier
             return;
         }
 
-        if (hero.IsPlayerClan() && !hero.IsPlayer() && !hero.IsPlayerCompanion() && SettingsManager.ClanExperienceMultiplier.IsChanged)
+        if (hero != Hero.MainHero && hero.IsPlayerClan() && !hero.IsPlayerCompanion() && SettingsManager.ClanExperienceMultiplier.IsChanged)
         {
             rawXp *= SettingsManager.ClanExperienceMultiplier.Value;
         }
@@ -106,7 +106,7 @@ public static class ExperienceMultiplier
             return;
         }
 
-        if (hero.IsPlayer() && SettingsManager.ExperienceMultiplier.IsChanged)
+        if (hero == Hero.MainHero && SettingsManager.ExperienceMultiplier.IsChanged)
         {
             rawXp *= SettingsManager.ExperienceMultiplier.Value;
         }
@@ -160,27 +160,70 @@ public static class LearningLimitMultiplier
     }
 }
 
-//[HarmonyPatch(typeof(DefaultCharacterDevelopmentModel), "CalculateLearningRate")]
-//public static class LearningRateMultiplier
-//{
-//    [UsedImplicitly]
-//    [HarmonyPostfix]
-//    public static void CalculateLearningRate(IReadOnlyPropertyOwner<CharacterAttribute> characterAttributes, int focusValue, SkillObject skill, bool includeDescriptions,
-//        ref ExplainedNumber __result)
-//    {
-//        try
-//        {
-//            if (characterAttributes.IsPlayer() && SettingsManager.LearningRateMultiplier.IsChanged)
-//            {
-//                __result *= SettingsManager.LearningRateMultiplier.Value;
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            SubModule.LogError(e, typeof(LearningRateMultiplier));
-//        }
-//    }
-//}
+[HarmonyPatch(typeof(DefaultCharacterDevelopmentModel), "CalculateLearningRate", new Type[]
+{
+    typeof(IReadOnlyPropertyOwner<CharacterAttribute>),
+    typeof(int),
+    typeof(int),
+    typeof(SkillObject),
+    typeof(bool)
+})]
+public static class LearningRateMultiplier
+{
+    [UsedImplicitly]
+    [HarmonyPostfix]
+    public static void CalculateLearningRate(
+        IReadOnlyPropertyOwner<CharacterAttribute> characterAttributes,
+        ref ExplainedNumber __result)
+    {
+        try
+        {
+            Hero hero = FindPlayerClanHero(characterAttributes);
+            if (hero == Hero.MainHero && SettingsManager.LearningRateMultiplier.IsChanged)
+            {
+                __result.AddMultiplier(SettingsManager.LearningRateMultiplier.Value);
+            }
+            else if (hero?.IsPlayerCompanion == true && SettingsManager.CompanionLearningRateMultiplier.IsChanged)
+            {
+                __result.AddMultiplier(SettingsManager.CompanionLearningRateMultiplier.Value);
+            }
+        }
+        catch (Exception e)
+        {
+            SubModule.LogError(e, typeof(LearningRateMultiplier));
+        }
+    }
+
+    private static Hero FindPlayerClanHero(IReadOnlyPropertyOwner<CharacterAttribute> characterAttributes)
+    {
+        Hero mainHero = Hero.MainHero;
+        if (mainHero == null || characterAttributes == null)
+        {
+            return null;
+        }
+
+        if (ReferenceEquals(mainHero.CharacterAttributes, characterAttributes))
+        {
+            return mainHero;
+        }
+
+        Clan playerClan = mainHero.Clan;
+        if (playerClan == null)
+        {
+            return null;
+        }
+
+        foreach (Hero hero in playerClan.Heroes)
+        {
+            if (hero != null && ReferenceEquals(hero.CharacterAttributes, characterAttributes))
+            {
+                return hero;
+            }
+        }
+
+        return null;
+    }
+}
 
 
 

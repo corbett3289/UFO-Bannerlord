@@ -500,6 +500,34 @@ public static class SettingsManager
         return new CheatValue<T>(false, defaultValue);
     }
 
+    private static CheatValue<T> GetAuthoritativeCampaignDropdownValue<T>(
+        Func<BannerlordCheatsPerCampaignSettings, Dropdown<LocalizedDropdownValue<T>>> perCampaignGetter,
+        Func<BannerlordCheatsGlobalSettings, Dropdown<LocalizedDropdownValue<T>>> globalGetter,
+        T defaultValue) where T : struct, Enum
+    {
+        T campaignValue = IsPerCampaignInstanceLoaded
+            ? perCampaignGetter(PerCampaignInstance).GetValue()
+            : defaultValue;
+        T globalValue = IsPerCampaignInstanceLoaded
+            ? defaultValue
+            : globalGetter(GlobalInstance).GetValue();
+        return ResolveAuthoritativeCampaignDropdown(
+            IsPerCampaignInstanceLoaded,
+            campaignValue,
+            globalValue,
+            defaultValue);
+    }
+
+    private static CheatValue<T> ResolveAuthoritativeCampaignDropdown<T>(
+        bool isCampaignLoaded,
+        T campaignValue,
+        T globalValue,
+        T defaultValue) where T : struct, Enum
+    {
+        T value = isCampaignLoaded ? campaignValue : globalValue;
+        return new CheatValue<T>(value.CompareTo(defaultValue) != 0, value);
+    }
+
     // Public properties using the helper methods
     public static CheatValue<bool> EnableHotkeys => 
         GetBoolValue(s => s.EnableHotkeys, s => s.EnableHotkeys);
@@ -850,7 +878,10 @@ public static class SettingsManager
         GetFloatValue(s => s.WorkshopSellingCostMultiplier, s => s.WorkshopSellingCostMultiplier, 1f);
 
     public static CheatValue<AutoChoosePerk_Type> AutoChoosePerk => 
-        GetDropdownValue(s => s.AutoChoosePerk, s => s.AutoChoosePerk, AutoChoosePerk_Type.No);
+        GetAuthoritativeCampaignDropdownValue(
+            s => s.AutoChoosePerk,
+            s => s.AutoChoosePerk,
+            AutoChoosePerk_Type.No);
 
     public static CheatValue<Setting_Language> LanguageSetting => 
         GetDropdownValue(s => s.LanguageSetting, s => s.LanguageSetting, Setting_Language.English);

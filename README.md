@@ -30,4 +30,4 @@ I want to give full credit to the original authors of the mods.
 - Missing or invalid selected language files fall back to bundled English as of v1.0.7. Original Russian translation credit: [MaG3ro](https://steamcommunity.com/id/MaG3ro).
 
 # Setting Fixes
-- As of v1.0.8, disabling `One Hit Kill` or `Party One Hit Kill` in a campaign overrides an older enabled Global value. New campaigns still inherit the Global defaults.
+- As of v1.0.13, this edition includes the maintained battle-cleanup, max-attribute, XP/learning, both-perks, and MCM Global-tab fixes from the War Sails edition while retaining a completely separate no-NavalDLC package.
