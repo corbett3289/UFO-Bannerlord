@@ -30,7 +30,25 @@ namespace UFO.Extension
         private static bool IsPlayerClanMember(Hero hero)
         {
             Clan playerClan = PlayerClanOrNull();
-            return hero != null && playerClan != null && hero.Clan == playerClan;
+            if (hero == null || playerClan == null)
+            {
+                return false;
+            }
+
+            if (hero == Hero.MainHero || hero.Clan == playerClan || hero.IsPlayerCompanion)
+            {
+                return true;
+            }
+
+            foreach (Hero clanHero in playerClan.Heroes)
+            {
+                if (clanHero == hero)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static int AgeScale(this Hero hero)
@@ -178,7 +196,7 @@ namespace UFO.Extension
                 return;
             }
 
-            if (!ShouldAddBothBranchPerks(SettingsManager.AutoChoosePerk.Value, hero.EnhanceType()))
+            if (!ShouldAddBothBranchPerks(SettingsManager.AutoChoosePerk.Value, hero))
             {
                 return;
             }
@@ -192,6 +210,26 @@ namespace UFO.Extension
                 {
                     hero.HeroDeveloper.AddPerk(item);
                 }
+            }
+        }
+
+        internal static bool ShouldAddBothBranchPerks(AutoChoosePerk_Type scope, Hero hero)
+        {
+            if (hero == null)
+            {
+                return false;
+            }
+
+            switch (scope)
+            {
+                case AutoChoosePerk_Type.Clan:
+                    return IsPlayerClanMember(hero);
+                case AutoChoosePerk_Type.Player:
+                    return hero == Hero.MainHero;
+                case AutoChoosePerk_Type.All:
+                    return true;
+                default:
+                    return false;
             }
         }
 
