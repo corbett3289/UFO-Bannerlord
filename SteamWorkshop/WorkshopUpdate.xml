@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="v1.0.13 fixes Global Mod Options discovery after dependency updates. Localization now initializes safely when MCM requests UFO metadata early, preventing the literal ModName label and reducing Global-tab exceptions. Dropdown defaults also use update-safe enum conversion." />
+		<ChangeNotes Value="v1.0.15 fixes Dual Perks and other hero-enhancement features stopping after loading or replacing a save. Campaign readiness is now restored even when UFO's Harmony patches remain active between campaign sessions. Includes the v1.0.14 companion and player-clan Dual Perks fixes." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />

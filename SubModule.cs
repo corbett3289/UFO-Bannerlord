@@ -70,16 +70,23 @@ internal class SubModule : MBSubModuleBase
     {
         base.OnAfterGameInitializationFinished(game, starterObject);
 
-        if (!(game.GameType is Campaign) || PatchesApplied)
+        if (!(game.GameType is Campaign))
         {
             return;
         }
 
-        patcher = new Harmony("UFO");
+        if (!PatchesApplied)
+        {
+            patcher = new Harmony("UFO");
 
-        //UNPATCH(patcher);
+            //UNPATCH(patcher);
 
-        PATCH(patcher, ref PatchesApplied);
+            PATCH(patcher, ref PatchesApplied);
+        }
+
+        // Harmony patches can remain active while Bannerlord replaces or reloads a
+        // campaign. OnGameStart clears this flag, so restore it even when no repatch
+        // is required for the newly loaded campaign.
         CampaignReady = true;
 
         //PatchInspector.PatchInformation();

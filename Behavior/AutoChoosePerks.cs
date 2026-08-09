@@ -10,6 +10,7 @@ public sealed class AutoChoosePerks : CampaignBehaviorBase
 
     public override void RegisterEvents()
     {
+        CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, ApplyPlayerClanPerks);
         CampaignEvents.DailyTickHeroEvent.AddNonSerializedListener(this, ApplyEligiblePerks);
         CampaignEvents.PerkOpenedEvent.AddNonSerializedListener(this, OnPerkOpened);
     }
@@ -21,6 +22,25 @@ public sealed class AutoChoosePerks : CampaignBehaviorBase
     private void OnPerkOpened(Hero hero, PerkObject perk)
     {
         ApplyEligiblePerks(hero);
+    }
+
+    private void ApplyPlayerClanPerks()
+    {
+        Clan playerClan = Hero.MainHero?.Clan;
+        if (playerClan == null)
+        {
+            return;
+        }
+
+        ApplyEligiblePerks(Hero.MainHero);
+
+        foreach (Hero hero in playerClan.Heroes)
+        {
+            if (hero != Hero.MainHero)
+            {
+                ApplyEligiblePerks(hero);
+            }
+        }
     }
 
     private void ApplyEligiblePerks(Hero hero)

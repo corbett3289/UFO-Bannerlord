@@ -205,15 +205,6 @@ internal class MiscPatchs
         }
     }
 
-    [HarmonyPatch(typeof(CampaignEvents), "OnHeroJoinedParty")]
-    internal class OnHeroJoinedPartyPostfixPatch
-    {
-        private static void Postfix(ref Hero hero, ref MobileParty mobileParty)
-        {
-            hero.AddBothBranchPerks();
-        }
-    }
-
     /*
     [HarmonyPatch(typeof(CraftingCampaignBehavior), "HourlyTick")]
     internal class HourlyTickPostfixPatch
