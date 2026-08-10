@@ -1,0 +1,18 @@
+<Tasks>
+	<CreateItem/>
+	<UpdateItem>
+		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
+		<ItemDescription Value="UFO's Cheat Mods Bundle [1.4.8]&#xA;&#xA;A separate War Sails compatibility edition for Bannerlord v1.4.8 and War Sails v1.2.8. This is a Codex-led compatibility and maintenance build of UFOdestiny's original bundle.&#xA;&#xA;IMPORTANT&#xA;Do not enable this alongside UFO's Cheat Mods Bundle [1.4.7] or the No War Sails edition. Use only one UFO edition at a time. Existing saves may display a module mismatch because this edition has a new module identity.&#xA;&#xA;TESTING&#xA;The project compiles against Bannerlord v1.4.8 and War Sails v1.2.8, and its Harmony patches and reflected game members have been compatibility-audited. Campaign gameplay has not been exhaustively retested. Please report bugs or crashes in the comments with the action you performed, the enabled setting, and a crash ID or report link when available.&#xA;&#xA;CREDITS&#xA;All original work and bundle credit belongs to UFOdestiny and the original mod authors. This item is only a compatibility update.&#xA;&#xA;Original source: https://github.com/UFOdestiny/UFO-Bannerlord&#xA;Original Workshop item: https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039&#xA;Maintained 1.4.7 edition: https://steamcommunity.com/sharedfiles/filedetails/?id=3767139118&#xA;&#xA;Bundled original mods and authors:&#xA;Bannerlord Cheats Reload: https://www.nexusmods.com/mountandblade2bannerlord/mods/6446&#xA;Xorberax's Legacy: https://www.nexusmods.com/mountandblade2bannerlord/mods/3462&#xA;Hero Enhancement: https://www.nexusmods.com/mountandblade2bannerlord/mods/4827&#xA;Recruit Exile Clans: https://steamcommunity.com/sharedfiles/filedetails/?id=3255329103&#xA;Keep Your Daughters: https://www.nexusmods.com/mountandblade2bannerlord/mods/5148&#xA;Super Throwing Collection: https://steamcommunity.com/sharedfiles/filedetails/?id=2885230883&#xA;loongspear: https://steamcommunity.com/sharedfiles/filedetails/?id=3017866291&#xA;Super OP Arrows: https://bbs.mountblade.com.cn/download_1580.html&#xA;&#xA;Language credits from the original release: Russian by MaG3ro and Portuguese by Kyo."/>
+		<Tags>
+			<Tag Value="Utility" />
+			<Tag Value="Singleplayer" />
+			<Tag Value="1.4.8" />
+		</Tags>
+		<Image Value="C:\UFO-Bannerlord\SteamWorkshop\image.png"/>
+		<Visibility Value="Public"/>
+	</UpdateItem>
+</Tasks>
+
+<!--
+"C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.SteamWorkshop.exe" C:\UFO-Bannerlord\SteamWorkshop\WorkshopCreate148.xml
+-->

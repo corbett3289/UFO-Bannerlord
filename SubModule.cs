@@ -115,6 +115,7 @@ internal class SubModule : MBSubModuleBase
         Type[] typesFromAssembly = AccessTools.GetTypesFromAssembly(assembly);
         List<string> list = new List<string>();
         List<string> Shokuho_list = new List<string>();
+        List<(Type Type, Exception Error)> failures = new List<(Type, Exception)>();
         Type[] array = typesFromAssembly;
         foreach (Type type in array)
         {
@@ -123,8 +124,9 @@ internal class SubModule : MBSubModuleBase
                 //PatchInfo(type);
                 new PatchClassProcessor(patcher, type).Patch();
             }
-            catch (HarmonyException)
+            catch (Exception e)
             {
+                failures.Add((type, e));
                 if (getNamespace(type) == "Shokuho")
                 {
                     Shokuho_list.Add(type.Name);
@@ -137,6 +139,16 @@ internal class SubModule : MBSubModuleBase
         }
 
         PatchesApplied = true;
+        if (failures.Any())
+        {
+            try
+            {
+                CreatePatchFailureFile(failures);
+            }
+            catch
+            {
+            }
+        }
         if (list.Any())
         {
             InformationManager.ShowInquiry(new InquiryData(L10N.GetText("ModFailedLoadWarningTitle"), L10N.GetTextFormat("ModFailedLoadWarningMessage", string.Join(Environment.NewLine, list)), isAffirmativeOptionShown: true, isNegativeOptionShown: false, L10N.GetText("ModWarningMessageConfirm"), null, null, null));
@@ -242,14 +254,42 @@ internal class SubModule : MBSubModuleBase
             stringBuilder.AppendLine("Harmony Patch:");
             HarmonyPatch customAttribute = type.GetCustomAttribute<HarmonyPatch>();
             stringBuilder.AppendLine("Type: " + type.FullName);
-            stringBuilder.AppendLine("Declaring Type: " + customAttribute.info.declaringType.FullName);
-            stringBuilder.AppendLine("Method: " + customAttribute.info.methodName);
+            stringBuilder.AppendLine("Declaring Type: " + (customAttribute?.info?.declaringType?.FullName ?? "Unknown"));
+            stringBuilder.AppendLine("Method: " + (customAttribute?.info?.methodName ?? "Unknown"));
         }
         stringBuilder.AppendLine();
         stringBuilder.AppendLine("Exception:");
         stringBuilder.AppendLine(e.ToString());
         File.WriteAllText(text, stringBuilder.ToString());
         return text;
+    }
+
+    private static string CreatePatchFailureFile(IEnumerable<(Type Type, Exception Error)> failures)
+    {
+        string path = $"PatchFailures-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.txt";
+        string directoryName = Path.GetDirectoryName(typeof(SubModule).Assembly.Location);
+        string filePath = Path.Combine(directoryName, path);
+        StringBuilder report = new StringBuilder();
+        report.AppendLine("UFO Harmony patch failures");
+        report.AppendLine();
+        report.AppendLine("Modules:");
+        foreach (ModuleInfo module in ModuleHelper.GetModules())
+        {
+            report.AppendLine($"{module.Name} {module.Version}");
+        }
+
+        foreach ((Type type, Exception error) in failures)
+        {
+            HarmonyPatch patch = type.GetCustomAttribute<HarmonyPatch>();
+            report.AppendLine();
+            report.AppendLine("Patch: " + (type?.FullName ?? "Unknown"));
+            report.AppendLine("Declaring Type: " + (patch?.info?.declaringType?.FullName ?? "Unknown"));
+            report.AppendLine("Method: " + (patch?.info?.methodName ?? "Unknown"));
+            report.AppendLine(error?.ToString() ?? "Unknown exception");
+        }
+
+        File.WriteAllText(filePath, report.ToString());
+        return filePath;
     }
 
     protected void ReplaceModel<TBaseType, TChildType>(IGameStarter gameStarterObject) where TBaseType : GameModel where TChildType : TBaseType

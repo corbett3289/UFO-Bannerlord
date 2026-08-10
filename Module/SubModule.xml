@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Module xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
 	xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/BUTR/Bannerlord.XmlSchemas/master/SubModule.xsd">
-	<Id value="UFO" />
-	<Name value="UFO's Cheat Mods Bundle [1.4.7]" />
-	<Version value="v1.0.15" />
+	<Id value="UFO148" />
+	<Name value="UFO's Cheat Mods Bundle [1.4.8]" />
+	<Version value="v1.0.16" />
 	<DefaultModule value="false" />
 	<ModuleCategory value="Singleplayer" />
 	<ModuleType value="Community" />
@@ -25,13 +25,17 @@
 		<DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" version="v2.11.0"/>
 		<DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" version="v2.13.2.*"/>
 		<DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v5.12.1"/>
-		<DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.4.7.*"/>
-		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.4.7.*"/>
-		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.4.7.*"/>
-		<DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="v1.4.7.*"/>
-		<DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="v1.4.7.*"/>
-		<DependedModuleMetadata id="NavalDLC" order="LoadBeforeThis" version="v1.2.7.*"/>
+		<DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.4.8.*"/>
+		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.4.8.*"/>
+		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.4.8.*"/>
+		<DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="v1.4.8.*"/>
+		<DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="v1.4.8.*"/>
+		<DependedModuleMetadata id="NavalDLC" order="LoadBeforeThis" version="v1.2.8.*"/>
 	</DependedModuleMetadatas>
+	<IncompatibleModules>
+		<Module Id="UFO" />
+		<Module Id="UFONoWarSails" />
+	</IncompatibleModules>
 	<SubModules>
 		<SubModule>
 			<Name value="UFO" />

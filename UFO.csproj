@@ -7,6 +7,7 @@
 		<LangVersion>12.0</LangVersion>
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
+		<DeployModuleId>UFO148</DeployModuleId>
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Platforms>x64</Platforms>
@@ -115,8 +116,8 @@
 			<FilesToCopy Include="$(OutPutPath)\*.*" />
 		</ItemGroup>
 		
-		<Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(GameFolder)\Modules\UFO\bin\Win64_Shipping_Client\" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="Module\SubModule.xml" DestinationFolder="$(GameFolder)\Modules\UFO\" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(GameFolder)\Modules\$(DeployModuleId)\bin\Win64_Shipping_Client\" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="Module\SubModule.xml" DestinationFolder="$(GameFolder)\Modules\$(DeployModuleId)\" SkipUnchangedFiles="true" />
 	</Target>
 
 </Project>
