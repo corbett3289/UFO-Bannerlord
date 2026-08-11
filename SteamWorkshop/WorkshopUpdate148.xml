@@ -4,13 +4,13 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="Initial v1.0.16 compatibility release for Bannerlord v1.4.8 and War Sails v1.2.8. Includes the maintained fixes from the 1.4.7 edition." />
+		<ChangeNotes Value="Updated the Workshop icon so the supported Bannerlord v1.4.8 and War Sails v1.2.8 versions are immediately clear." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />
 			<Tag Value="1.4.8" />
 		</Tags>
-		<Image Value="C:\UFO-Bannerlord\SteamWorkshop\image.png"/>
+		<Image Value="C:\UFO-Bannerlord\SteamWorkshop\image148.png"/>
 		<Visibility Value="Public"/>
 	</UpdateItem>
 </Tasks>
