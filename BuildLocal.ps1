@@ -9,7 +9,7 @@ $game = "C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlo
 $framework = "C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1"
 $csc = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Roslyn\csc.exe"
 $deployModules = @(
-    (Join-Path $game "Modules\UFO148")
+    (Join-Path $game "Modules\UFONoWarSails148")
 )
 $output = Join-Path $repo "Module\bin\Win64_Shipping_Client\UFO.dll"
 
@@ -43,7 +43,7 @@ $gameBin = Join-Path $game "bin\Win64_Shipping_Client"
 $refFiles += Add-ManagedDlls $gameBin "TaleWorlds*.dll" | Where-Object { [IO.Path]::GetFileName($_) -ne "TaleWorlds.Native.dll" }
 $refFiles += Join-Path $gameBin "Newtonsoft.Json.dll"
 
-foreach ($module in @("Native", "SandBox", "SandBoxCore", "StoryMode", "CustomBattle", "BirthAndDeath", "NavalDLC", "Bannerlord.Harmony", "Bannerlord.UIExtenderEx")) {
+foreach ($module in @("Native", "SandBox", "SandBoxCore", "StoryMode", "CustomBattle", "BirthAndDeath", "Bannerlord.Harmony", "Bannerlord.UIExtenderEx")) {
     $dir = Join-Path $game "Modules\$module\bin\Win64_Shipping_Client"
     $refFiles += Add-ManagedDlls $dir | Where-Object {
         [IO.Path]::GetFileName($_) -notmatch "^(System|Microsoft)\." -and

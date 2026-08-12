@@ -1,4 +1,10 @@
-# UFO's Cheat Mods Bundle for Bannerlord [1.4.7] - War Sails
+# UFO's Cheat Mods Bundle for Bannerlord [1.4.8] - No War Sails
+
+This branch packages the maintained Bannerlord v1.4.8 update without a War Sails/NavalDLC dependency. It is a separate Workshop module from every War Sails edition and from the maintained v1.4.7 no-War-Sails item. Only one UFO edition may be enabled at a time.
+
+All gameplay features and compatibility fixes are shared with the maintained v1.4.8 edition. The original mod and bundled work remain credited to UFOdestiny and the original authors below.
+
+> **Testing status:** The maintainer uses the War Sails edition, so this no-War-Sails build has not been campaign gameplay-tested. It compiles and passes the isolated compatibility audit without any NavalDLC reference or dependency, but should still be treated as an early public test release.
 
 My original goal was to learn how to make mods. It just so happened that the 'crush through' feature I wanted stopped working, so I decompiled it and combined it with several well-known mods. I noticed that many people were also sad about some wanted features no longer working, so I decided to release this mod directly. 
 
@@ -15,7 +21,9 @@ I want to give full credit to the original authors of the mods.
 - [拥有《穿透/穿盾/破盾/击倒/爆炸》功能的箭矢 (Super OP Arrows)](https://bbs.mountblade.com.cn/download_1580.html)
 
 # Steam Workshop
-- [UFO's Cheat Mods Bundle](https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039)
+- [Original UFO's Cheat Mods Bundle](https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039)
+- [Maintained War Sails 1.4.8 edition](https://steamcommunity.com/sharedfiles/filedetails/?id=3781136815)
+- [Maintained no-War-Sails 1.4.7 edition](https://steamcommunity.com/sharedfiles/filedetails/?id=3768535938)
 
 # Language Support
 - Bundled by this fork: English, Chinese, and a generic fallback.

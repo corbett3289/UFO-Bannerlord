@@ -1,0 +1,18 @@
+<Tasks>
+	<CreateItem/>
+	<UpdateItem>
+		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
+		<ItemDescription Value="[h1]UFO's Cheat Mods Bundle [1.4.8] - No War Sails[/h1]&#xA;&#xA;[b]War Sails / NavalDLC is NOT required.[/b]&#xA;&#xA;This is a separate Bannerlord v1.4.8 edition for players who do not own or use War Sails. It contains the maintained feature fixes from the UFO v1.0.16 compatibility release while removing every NavalDLC module and assembly dependency.&#xA;&#xA;[b]IMPORTANT[/b]&#xA;Do not enable this alongside any other UFO edition. Use only one UFO's Cheat Mods Bundle module at a time. Existing saves may display a module mismatch because this edition has its own module identity.&#xA;&#xA;[h1]Testing status[/h1]&#xA;I use the War Sails edition, so this no-War-Sails variant has not been campaign gameplay-tested by me. It compiles against Bannerlord v1.4.8 without any NavalDLC reference, and all Harmony patches and reflected game members pass the isolated compatibility audit. It should theoretically work, but please treat this as an early public test release.&#xA;&#xA;[h1]Dependencies[/h1]&#xA;Harmony&#xA;ButterLib&#xA;UIExtenderEx&#xA;Mod Configuration Menu v5&#xA;&#xA;[h1]Credits[/h1]&#xA;All original work and bundle credit belongs to UFOdestiny and the original mod authors. This item is only a Codex-led compatibility and maintenance build.&#xA;&#xA;Original source: https://github.com/UFOdestiny/UFO-Bannerlord&#xA;Original Workshop item: https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039&#xA;Maintained War Sails 1.4.8 edition: https://steamcommunity.com/sharedfiles/filedetails/?id=3781136815&#xA;Maintained no-War-Sails 1.4.7 edition: https://steamcommunity.com/sharedfiles/filedetails/?id=3768535938&#xA;&#xA;Bundled original mods and authors:&#xA;Bannerlord Cheats Reload: https://www.nexusmods.com/mountandblade2bannerlord/mods/6446&#xA;Xorberax's Legacy: https://www.nexusmods.com/mountandblade2bannerlord/mods/3462&#xA;Hero Enhancement: https://www.nexusmods.com/mountandblade2bannerlord/mods/4827&#xA;Recruit Exile Clans: https://steamcommunity.com/sharedfiles/filedetails/?id=3255329103&#xA;Keep Your Daughters: https://www.nexusmods.com/mountandblade2bannerlord/mods/5148&#xA;Super Throwing Collection: https://steamcommunity.com/sharedfiles/filedetails/?id=2885230883&#xA;loongspear: https://steamcommunity.com/sharedfiles/filedetails/?id=3017866291&#xA;Super OP Arrows: https://bbs.mountblade.com.cn/download_1580.html&#xA;&#xA;Language credits from the original release: Russian by MaG3ro and Portuguese by Kyo.&#xA;&#xA;[h1]Bug reports[/h1]&#xA;Please report bugs and crashes in the comments. Include what you were doing, which cheat or setting was involved, and any crash identifier or report link so I can try to fix it."/>
+		<Tags>
+			<Tag Value="Utility"/>
+			<Tag Value="Singleplayer"/>
+			<Tag Value="1.4.8"/>
+		</Tags>
+		<Image Value="C:\UFO-Bannerlord\SteamWorkshop\image-no-war-sails-148.png"/>
+		<Visibility Value="Public"/>
+	</UpdateItem>
+</Tasks>
+
+<!--
+"C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord\bin\Win64_Shipping_Client\TaleWorlds.MountAndBlade.SteamWorkshop.exe" C:\UFO-Bannerlord\SteamWorkshop\WorkshopCreateNoWarSails148.xml
+-->

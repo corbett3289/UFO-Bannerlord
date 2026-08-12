@@ -7,7 +7,7 @@
 		<LangVersion>12.0</LangVersion>
 		<ModuleId>$(MSBuildProjectName)</ModuleId>
 		<ModuleName>$(MSBuildProjectName)</ModuleName>
-		<DeployModuleId>UFO148</DeployModuleId>
+		<DeployModuleId>UFONoWarSails148</DeployModuleId>
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<Platforms>x64</Platforms>
@@ -68,12 +68,6 @@
 			<HintPath>%(Identity)</HintPath>
 			<Private>False</Private>
 		</Reference>
-		<Reference Include="$(GameFolder)\Modules\NavalDLC\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-
-
 		<!--Shokuho-->
 		<!--
 		<Reference Include="E:\SteamLibrary\steamapps\workshop\content\261550\3496296180\bin\Win64_Shipping_Client\*.dll">

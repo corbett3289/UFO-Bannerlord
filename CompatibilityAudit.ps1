@@ -9,7 +9,6 @@ $probeDirs = @(
     (Join-Path $game "Modules\StoryMode\bin\Win64_Shipping_Client"),
     (Join-Path $game "Modules\CustomBattle\bin\Win64_Shipping_Client"),
     (Join-Path $game "Modules\BirthAndDeath\bin\Win64_Shipping_Client"),
-    (Join-Path $game "Modules\NavalDLC\bin\Win64_Shipping_Client"),
     (Join-Path $game "Modules\Bannerlord.Harmony\bin\Win64_Shipping_Client"),
     (Join-Path $game "Modules\Bannerlord.UIExtenderEx\bin\Win64_Shipping_Client"),
     "C:\Program Files (x86)\Steam\steamapps\workshop\content\261550\2859232415\bin\Win64_Shipping_Client",
@@ -53,6 +52,8 @@ try {
     }
     $harmonyAssembly = [Reflection.Assembly]::LoadFrom($assemblyMap["0Harmony"])
     $ufoAssembly = [Reflection.Assembly]::LoadFrom((Join-Path $PSScriptRoot "Module\bin\Win64_Shipping_Client\UFO.dll"))
+    $navalReferences = @($ufoAssembly.GetReferencedAssemblies() |
+        Where-Object { $_.Name -like "NavalDLC*" })
     $harmonyType = $harmonyAssembly.GetType("HarmonyLib.Harmony", $true)
     $patchAttributeType = $harmonyAssembly.GetType("HarmonyLib.HarmonyPatch", $true)
     $harmony = [Activator]::CreateInstance($harmonyType, [object[]]@("ufo.compatibility.audit"))
@@ -156,10 +157,11 @@ try {
     Write-Output ("Failed=" + $failures.Count)
     Write-Output ("ReflectedMembers=" + $memberChecks)
     Write-Output ("MissingMembers=" + $memberFailures.Count)
+    Write-Output ("NavalDLCReferences=" + $navalReferences.Count)
     $failures | ForEach-Object { Write-Output $_ }
     $memberFailures | ForEach-Object { Write-Output $_ }
 
-    if ($failures.Count -ne 0 -or $applied -ne 184 -or $memberFailures.Count -ne 0) {
+    if ($failures.Count -ne 0 -or $applied -ne 184 -or $memberFailures.Count -ne 0 -or $navalReferences.Count -ne 0) {
         exit 1
     }
 } finally {
