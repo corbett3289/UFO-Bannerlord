@@ -19,6 +19,11 @@ namespace UFO.Extension
 
         private static bool CampaignHeroesReady()
         {
+            if (!SubModule.CampaignReady && Campaign.Current != null && Hero.MainHero != null)
+            {
+                SubModule.MarkCampaignReady();
+            }
+
             return SubModule.CampaignReady;
         }
 
@@ -191,12 +196,17 @@ namespace UFO.Extension
 
         public static void AddBothBranchPerks(this Hero hero)
         {
+            AddBothBranchPerks(hero, SettingsManager.AutoChoosePerk.Value);
+        }
+
+        public static void AddBothBranchPerks(this Hero hero, AutoChoosePerk_Type scope)
+        {
             if (!IsHeroReady(hero) || !hero.IsAlive || hero.HeroDeveloper == null)
             {
                 return;
             }
 
-            if (!ShouldAddBothBranchPerks(SettingsManager.AutoChoosePerk.Value, hero))
+            if (!ShouldAddBothBranchPerks(scope, hero))
             {
                 return;
             }

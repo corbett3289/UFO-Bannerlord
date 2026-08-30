@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="Updated the Workshop icon so the supported Bannerlord v1.4.8 and War Sails v1.2.8 versions are immediately clear." />
+		<ChangeNotes Value="v1.0.18 fixes the Ctrl+A Set All Attributes hotkey crashing on character screens supplied or extended by other UI mods. UFO now resolves inherited and alternate compatible view-model fields safely, and the related character, inventory, and party hotkeys exit cleanly when a screen has no compatible view model." />
 		<Tags>
 			<Tag Value="Utility" />
 			<Tag Value="Singleplayer" />

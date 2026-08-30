@@ -124,7 +124,11 @@ public static class EnableHotkeysAddItems
     public static void AddItems(int count)
     {
         GauntletInventoryScreen screen = ScreenManager.TopScreen as GauntletInventoryScreen;
-        SPInventoryVM viewModel = screen.GetViewModel<SPInventoryVM>();
+        if (!screen.TryGetViewModel(out SPInventoryVM viewModel))
+        {
+            return;
+        }
+
         SPItemVM selectedItem = viewModel.GetSelectedItem();
         if (selectedItem != null)
         {
@@ -183,8 +187,11 @@ public static class EnableHotkeysCharacterAttributes
             {
                 if (Keys.IsKeyPressed(InputKey.LeftControl, InputKey.A))
                 {
-                    CharacterDeveloperVM viewModel = ScreenManager.TopScreen.GetViewModel<CharacterDeveloperVM>();
-                    Hero hero = viewModel.CurrentCharacter.Hero;
+                    if (!TryGetCurrentCharacter(out CharacterDeveloperVM viewModel, out Hero hero))
+                    {
+                        return;
+                    }
+
                     SetMaximum(hero, DefaultCharacterAttributes.Control);
                     SetMaximum(hero, DefaultCharacterAttributes.Cunning);
                     SetMaximum(hero, DefaultCharacterAttributes.Endurance);
@@ -235,8 +242,11 @@ public static class EnableHotkeysCharacterAttributes
 
     public static void AddPoint(CharacterAttribute attribute)
     {
-        CharacterDeveloperVM viewModel = ScreenManager.TopScreen.GetViewModel<CharacterDeveloperVM>();
-        Hero hero = viewModel.CurrentCharacter.Hero;
+        if (!TryGetCurrentCharacter(out CharacterDeveloperVM viewModel, out Hero hero))
+        {
+            return;
+        }
+
         int attributeValue = hero.GetAttributeValue(attribute);
         if (attributeValue < Campaign.Current.Models.CharacterDevelopmentModel.MaxAttribute)
         {
@@ -245,6 +255,18 @@ public static class EnableHotkeysCharacterAttributes
             string text = string.Format(L10N.GetText("AddAttributePointMessage"), attribute.Name, hero.Name);
             Message.Show(text);
         }
+    }
+
+    internal static bool TryGetCurrentCharacter(out CharacterDeveloperVM viewModel, out Hero hero)
+    {
+        hero = null;
+        if (!ScreenManager.TopScreen.TryGetViewModel(out viewModel) || viewModel.CurrentCharacter == null)
+        {
+            return false;
+        }
+
+        hero = viewModel.CurrentCharacter.Hero;
+        return hero != null;
     }
 }
 
@@ -260,8 +282,11 @@ public static class EnableHotkeysCharacterPoints
             {
                 if (Keys.IsKeyPressed(InputKey.LeftControl, InputKey.F))
                 {
-                    CharacterDeveloperVM viewModel = ScreenManager.TopScreen.GetViewModel<CharacterDeveloperVM>();
-                    Hero hero = viewModel.CurrentCharacter.Hero;
+                    if (!EnableHotkeysCharacterAttributes.TryGetCurrentCharacter(out CharacterDeveloperVM viewModel, out Hero hero))
+                    {
+                        return;
+                    }
+
                     hero.HeroDeveloper.UnspentFocusPoints++;
                     viewModel.CurrentCharacter.UnspentCharacterPoints++;
                     string text = string.Format(L10N.GetText("AddUnspentFocusPointMessage"), hero.Name);
@@ -269,8 +294,11 @@ public static class EnableHotkeysCharacterPoints
                 }
                 else if (Keys.IsKeyPressed(InputKey.LeftControl, InputKey.G))
                 {
-                    CharacterDeveloperVM viewModel2 = ScreenManager.TopScreen.GetViewModel<CharacterDeveloperVM>();
-                    Hero hero2 = viewModel2.CurrentCharacter.Hero;
+                    if (!EnableHotkeysCharacterAttributes.TryGetCurrentCharacter(out CharacterDeveloperVM viewModel2, out Hero hero2))
+                    {
+                        return;
+                    }
+
                     hero2.HeroDeveloper.UnspentAttributePoints++;
                     viewModel2.CurrentCharacter.UnspentAttributePoints++;
                     string text2 = string.Format(L10N.GetText("AddUnspentAttributePointMessage"), hero2.Name);
@@ -417,7 +445,11 @@ public static class EnableHotkeysTroopCount
     private static void AddTroops(int count)
     {
         GauntletPartyScreen screen = ScreenManager.TopScreen as GauntletPartyScreen;
-        PartyVM viewModel = screen.GetViewModel<PartyVM>();
+        if (!screen.TryGetViewModel(out PartyVM viewModel) || viewModel.CurrentCharacter == null)
+        {
+            return;
+        }
+
         PartyCharacterVM currentCharacter = viewModel.CurrentCharacter;
         if (!currentCharacter.IsHero)
         {
@@ -450,7 +482,11 @@ public static class EnableHotkeysTroopExperience
             if (ScreenManager.TopScreen is GauntletPartyScreen && Keys.IsKeyPressed(InputKey.LeftControl, InputKey.X) && SettingsManager.EnableHotkeys.Value)
             {
                 GauntletPartyScreen screen = ScreenManager.TopScreen as GauntletPartyScreen;
-                PartyVM viewModel = screen.GetViewModel<PartyVM>();
+                if (!screen.TryGetViewModel(out PartyVM viewModel) || viewModel.CurrentCharacter == null)
+                {
+                    return;
+                }
+
                 PartyCharacterVM currentCharacter = viewModel.CurrentCharacter;
                 if (!currentCharacter.IsHero && currentCharacter.IsUpgradableTroop)
                 {

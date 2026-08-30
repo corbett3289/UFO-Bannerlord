@@ -1,4 +1,4 @@
-# UFO's Cheat Mods Bundle for Bannerlord [1.4.7] - War Sails
+# UFO's Cheat Mods Bundle for Bannerlord [1.4.8] - War Sails
 
 My original goal was to learn how to make mods. It just so happened that the 'crush through' feature I wanted stopped working, so I decompiled it and combined it with several well-known mods. I noticed that many people were also sad about some wanted features no longer working, so I decided to release this mod directly. 
 
@@ -23,6 +23,8 @@ I want to give full credit to the original authors of the mods.
 - Missing or invalid selected language files fall back to bundled English as of v1.0.7. Original Russian translation credit: [MaG3ro](https://steamcommunity.com/id/MaG3ro).
 
 # Setting Fixes
+- As of v1.0.18, the `Ctrl+A` Set All Attributes hotkey supports inherited or alternate compatible character-screen view-model fields and safely ignores unsupported modded screens. Related inventory and party hotkeys use the same guarded lookup.
+- As of v1.0.17, `Automatically Acquire Both Perk Branches` restores campaign readiness and its selected scope after loading or reloading a save, reapplies eligible perks during load/session completion, and performs an hourly player-clan recovery pass.
 - As of v1.0.8, disabling `One Hit Kill` or `Party One Hit Kill` in a campaign overrides an older enabled Global value. New campaigns still inherit the Global defaults.
 - As of v1.0.9, `Automatically Acquire Both Perk Branches` applies its Player, Clan, and All Heroes scopes correctly. Eligible perks are checked on the campaign-wide daily hero tick, and a campaign's `No One` choice overrides an older Global value.
 - As of v1.0.10, forcing enemy troops to `Killed` preserves one unconscious survivor in lordless parties such as bandits, avoiding invalid all-dead rosters during post-battle cleanup.
