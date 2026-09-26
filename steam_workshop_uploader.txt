@@ -1,0 +1,49 @@
+Starting...
+LoadWithFullPath  subModulePath = C:\UFO-Bannerlord\Module/SubModule.xml
+Status: k_EItemUpdateStatusPreparingConfig 0 / 0
+Status: k_EItemUpdateStatusPreparingConfig 0 / 0
+Status: k_EItemUpdateStatusPreparingContent 0 / 0
+Status: k_EItemUpdateStatusPreparingContent 0 / 0
+Status: k_EItemUpdateStatusPreparingContent 0 / 0
+Status: k_EItemUpdateStatusPreparingContent 0 / 0
+Status: k_EItemUpdateStatusPreparingContent 0 / 0
+Status: k_EItemUpdateStatusPreparingContent 16667639 / 42482101
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 0
+Status: k_EItemUpdateStatusUploadingContent 0 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 0 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 0 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 0 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 5287 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 5287 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 5287 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 5287 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 297639 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 297639 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 1183911 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 1183911 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 1183911 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 1183911 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 1183911 / 1183911
+Status: k_EItemUpdateStatusUploadingContent 1183911 / 1183911
+Status: k_EItemUpdateStatusUploadingPreviewFile 0 / 0
+Status: k_EItemUpdateStatusUploadingPreviewFile 0 / 0
+Status: k_EItemUpdateStatusCommittingChanges 0 / 0
+Status: k_EItemUpdateStatusCommittingChanges 0 / 0
+Status: k_EItemUpdateStatusCommittingChanges 0 / 0
+Status: k_EItemUpdateStatusCommittingChanges 0 / 0
+Status: k_EItemUpdateStatusInvalid 0 / 0
+Uploading done!
+Finished...
+Application crashed with exception: System.InvalidOperationException: Cannot read keys when either application does not have a console or when console input has been redirected from a file. Try Console.Read.
+   at System.Console.ReadKey(Boolean intercept)
+   at TaleWorlds.MountAndBlade.SteamWorkshop.Program.ExitProgram(Int32 exitCode)
+   at TaleWorlds.MountAndBlade.SteamWorkshop.Program.Main(String[] args)
+Finished...
