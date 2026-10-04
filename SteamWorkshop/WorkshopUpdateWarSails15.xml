@@ -1,0 +1,17 @@
+<Tasks>
+  <GetItem>
+    <ItemId Value="REPLACE_WITH_NEW_15_ITEM_ID" />
+  </GetItem>
+  <UpdateItem>
+    <ModuleFolder Value="C:\UFO-Bannerlord\artifacts\packages\UFO15" />
+    <ItemDescription Value="[h1]UFO's Cheat Mods Bundle [1.5.3] - War Sails[/h1]&#xA;&#xA;Mod v1.0.19 for Bannerlord v1.5.3 only. Older game versions, including v1.5.0–v1.5.2, and future releases are unsupported.&#xA;Requires War Sails v1.3.3 paired with Bannerlord v1.5.3.&#xA;&#xA;[b]Enable only one UFO edition.[/b] This item has a new module identity. Older saves can display a module mismatch; back up a save before changing editions. Existing 1.4.8 items remain available separately.&#xA;&#xA;[h1]Dependencies[/h1]&#xA;Harmony 2.4.2+, ButterLib 2.11.1+, UIExtenderEx 2.13.2+, and Mod Configuration Menu v5 5.12.3+. Install dependency releases compatible with your game.&#xA;&#xA;[h1]Testing status[/h1]&#xA;Eight static edition/reference audits, seven auditor self-tests and 200 maintained regression checks per edition passed. Live v1.5.3 IL was checked. Historical IL and gameplay were not verified; older versions are excluded. Final rebuild and runtime smoke checks are pending before public release. Recorded results are in the maintained source. Report bugs with your game/DLC versions, the action and setting, and a crash ID or report link.&#xA;&#xA;[h1]Credits[/h1]&#xA;All original work and bundle credit belongs to UFOdestiny and the original authors. This is a compatibility and maintenance build by Arcayon.&#xA;Original source: https://github.com/UFOdestiny/UFO-Bannerlord&#xA;Original Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039&#xA;Maintained source: https://github.com/corbett3289/UFO-Bannerlord/tree/1.5&#xA;Bannerlord Cheats Reload: https://www.nexusmods.com/mountandblade2bannerlord/mods/6446&#xA;Xorberax's Legacy: https://www.nexusmods.com/mountandblade2bannerlord/mods/3462&#xA;Hero Enhancement: https://www.nexusmods.com/mountandblade2bannerlord/mods/4827&#xA;Recruit Exile Clans: https://steamcommunity.com/sharedfiles/filedetails/?id=3255329103&#xA;Keep Your Daughters: https://www.nexusmods.com/mountandblade2bannerlord/mods/5148&#xA;Super Throwing Collection: https://steamcommunity.com/sharedfiles/filedetails/?id=2885230883&#xA;loongspear: https://steamcommunity.com/sharedfiles/filedetails/?id=3017866291&#xA;Super OP Arrows: https://bbs.mountblade.com.cn/download_1580.html&#xA;Original translation credits: Russian by MaG3ro and Portuguese by Kyo." />
+    <Image Value="C:\UFO-Bannerlord\SteamWorkshop\image15.png" />
+    <Visibility Value="Private" />
+    <ChangeNotes Value="v1.0.19 compatibility release for Bannerlord v1.5.3 only. Maintained save-reload perk recovery and guarded hotkeys; separate War Sails v1.3.3/no-War-Sails editions. Older and future game versions are unsupported." />
+    <Tags>
+      <Tag Value="Utility" />
+      <Tag Value="Singleplayer" />
+      <Tag Value="1.5.3" />
+    </Tags>
+  </UpdateItem>
+</Tasks>

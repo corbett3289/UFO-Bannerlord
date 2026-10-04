@@ -411,6 +411,13 @@ public static class SettingsManager
 
     private static BannerlordCheatsPerCampaignSettings PerCampaignInstance => PerCampaignSettings<BannerlordCheatsPerCampaignSettings>.Instance ?? throw new InvalidOperationException("Should have checked if per-campaign instance is loaded!");
 
+    internal static bool TryGetCampaignAutoChoosePerkScope(out AutoChoosePerk_Type scope)
+    {
+        var campaignSettings = PerCampaignSettings<BannerlordCheatsPerCampaignSettings>.Instance;
+        scope = campaignSettings == null ? AutoChoosePerk_Type.No : campaignSettings.AutoChoosePerk.GetValue();
+        return campaignSettings != null;
+    }
+
     private static CheatValue<T> GetValue<T>(Func<BannerlordCheatsPerCampaignSettings, T> perCampaignGetter,
                                               Func<BannerlordCheatsGlobalSettings, T> globalGetter,
                                               T defaultValue)
@@ -445,6 +452,57 @@ public static class SettingsManager
         return new CheatValue<T>(false, defaultValue);
     }
 
+    private static CheatValue<bool> GetAuthoritativeCampaignBoolValue(
+        Func<BannerlordCheatsPerCampaignSettings, bool> perCampaignGetter,
+        Func<BannerlordCheatsGlobalSettings, bool> globalGetter)
+    {
+        if (IsPerCampaignInstanceLoaded)
+        {
+            bool value = perCampaignGetter(PerCampaignInstance);
+            return ResolveAuthoritativeCampaignBool(true, value, false);
+        }
+
+        bool globalValue = globalGetter(GlobalInstance);
+        return ResolveAuthoritativeCampaignBool(false, false, globalValue);
+    }
+
+    private static CheatValue<bool> ResolveAuthoritativeCampaignBool(
+        bool isCampaignLoaded,
+        bool campaignValue,
+        bool globalValue)
+    {
+        bool value = isCampaignLoaded ? campaignValue : globalValue;
+        return new CheatValue<bool>(value, value);
+    }
+
+    private static CheatValue<T> GetAuthoritativeCampaignDropdownValue<T>(
+        Func<BannerlordCheatsPerCampaignSettings, Dropdown<LocalizedDropdownValue<T>>> perCampaignGetter,
+        Func<BannerlordCheatsGlobalSettings, Dropdown<LocalizedDropdownValue<T>>> globalGetter,
+        T defaultValue) where T : struct, Enum
+    {
+        T campaignValue = IsPerCampaignInstanceLoaded
+            ? perCampaignGetter(PerCampaignInstance).GetValue()
+            : defaultValue;
+        T globalValue = IsPerCampaignInstanceLoaded
+            ? defaultValue
+            : globalGetter(GlobalInstance).GetValue();
+        return ResolveAuthoritativeCampaignDropdown(
+            IsPerCampaignInstanceLoaded,
+            campaignValue,
+            globalValue,
+            defaultValue);
+    }
+
+    private static CheatValue<T> ResolveAuthoritativeCampaignDropdown<T>(
+        bool isCampaignLoaded,
+        T campaignValue,
+        T globalValue,
+        T defaultValue) where T : struct, Enum
+    {
+        T value = isCampaignLoaded ? campaignValue : globalValue;
+        return new CheatValue<T>(value.CompareTo(defaultValue) != 0, value);
+    }
+
     // Public properties using the helper methods
     public static CheatValue<bool> EnableHotkeys => 
         GetValue(s => s.EnableHotkeys, s => s.EnableHotkeys);
@@ -477,7 +535,7 @@ public static class SettingsManager
         GetValue(s => s.PlayerHorseInvincible, s => s.PlayerHorseInvincible);
 
     public static CheatValue<bool> OneHitKill => 
-        GetValue(s => s.OneHitKill, s => s.OneHitKill);
+        GetAuthoritativeCampaignBoolValue(s => s.OneHitKill, s => s.OneHitKill);
 
     public static CheatValue<bool> SliceThroughEveryone => 
         GetValue(s => s.SliceThroughEveryone, s => s.SliceThroughEveryone);
@@ -525,7 +583,7 @@ public static class SettingsManager
         GetValue(s => s.PartyHeroesInvincible, s => s.PartyHeroesInvincible);
 
     public static CheatValue<bool> PartyOneHitKill => 
-        GetValue(s => s.PartyOneHitKill, s => s.PartyOneHitKill);
+        GetAuthoritativeCampaignBoolValue(s => s.PartyOneHitKill, s => s.PartyOneHitKill);
 
     public static CheatValue<bool> NoRunningAway => 
         GetValue(s => s.NoRunningAway, s => s.NoRunningAway);
@@ -798,7 +856,7 @@ public static class SettingsManager
         GetValue(s => s.WorkshopSellingCostMultiplier, s => s.WorkshopSellingCostMultiplier, 1f);
 
     public static CheatValue<AutoChoosePerk_Type> AutoChoosePerk => 
-        GetDropdownValue(s => s.AutoChoosePerk, s => s.AutoChoosePerk, AutoChoosePerk_Type.No);
+        GetAuthoritativeCampaignDropdownValue(s => s.AutoChoosePerk, s => s.AutoChoosePerk, AutoChoosePerk_Type.No);
 
     public static CheatValue<Setting_Language> LanguageSetting => 
         GetDropdownValue(s => s.LanguageSetting, s => s.LanguageSetting, Setting_Language.English);
@@ -1033,6 +1091,7 @@ public static class SettingsManager
     public static CheatValue<float> PlayerPartyMeleeAiParryDecisionMultiplier => GetValue(s => s.PlayerPartyMeleeAiParryDecisionMultiplier, s => s.PlayerPartyMeleeAiParryDecisionMultiplier, 1f);
     public static CheatValue<float> PlayerPartyMeleeAiShieldDefenseMultiplier => GetValue(s => s.PlayerPartyMeleeAiShieldDefenseMultiplier, s => s.PlayerPartyMeleeAiShieldDefenseMultiplier, 1f);
 
+#if UFO_NAVALDLC
     public static CheatValue<float> NavalCampaignSpeedMultiplier => GetValue(s => s.NavalCampaignSpeedMultiplier, s => s.NavalCampaignSpeedMultiplier, 1f);
     public static CheatValue<float> NavalOarForceMultiplier => GetValue(s => s.NavalOarForceMultiplier, s => s.NavalOarForceMultiplier, 1f);
     public static CheatValue<float> NavalSailForceMultiplier => GetValue(s => s.NavalSailForceMultiplier, s => s.NavalSailForceMultiplier, 1f);
@@ -1050,6 +1109,7 @@ public static class SettingsManager
     public static CheatValue<float> NavalDeploymentLimitMultiplier => GetValue(s => s.NavalDeploymentLimitMultiplier, s => s.NavalDeploymentLimitMultiplier, 1f);
     public static CheatValue<float> NavalBattleRewardMultiplier => GetValue(s => s.NavalBattleRewardMultiplier, s => s.NavalBattleRewardMultiplier, 1f);
     public static CheatValue<float> NavalFleetMinimumTroopPercentage => GetValue(s => s.NavalFleetMinimumTroopPercentage, s => s.NavalFleetMinimumTroopPercentage, 100f);
+#endif
 
     public static CheatValue<bool> TestMode => 
         GetValue(s => s.TestMode, s => s.TestMode);

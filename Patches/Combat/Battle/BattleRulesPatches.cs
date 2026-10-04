@@ -49,6 +49,7 @@ public static class AKD_S
     typeof(PartyBase),
     typeof(float),
     typeof(MapEvent),
+    typeof(BattleEnvironment),
     typeof(float),
     typeof(float),
 })]
@@ -395,7 +396,7 @@ public static class EnemyTroopsKnockoutOrKilled
             {
                 if (SettingsManager.EnemyTroopsKnockoutOrKilled.Value == KnockoutOrKilled.Killed)
                 {
-                    __result = 1f;
+                    __result = ShouldPreserveLastLordlessTroop(effectedAgent) ? 0f : 1f;
                 }
                 else if (SettingsManager.EnemyTroopsKnockoutOrKilled.Value == KnockoutOrKilled.Knockout)
                 {
@@ -407,6 +408,41 @@ public static class EnemyTroopsKnockoutOrKilled
         {
             SubModule.LogError(e, typeof(EnemyTroopsKnockoutOrKilled));
         }
+    }
+
+    private static bool ShouldPreserveLastLordlessTroop(Agent effectedAgent)
+    {
+        if (!effectedAgent.Origin.TryGetParty(out PartyBase party) ||
+            party.LeaderHero != null ||
+            effectedAgent.Team == null)
+        {
+            return false;
+        }
+
+        int otherActivePartyTroops = effectedAgent.Team.ActiveAgents.Count(agent =>
+            agent != null &&
+            agent != effectedAgent &&
+            agent.Health > 0f &&
+            agent.Origin.TryGetParty(out PartyBase otherParty) &&
+            otherParty == party);
+
+        return ShouldForceKnockoutForLordlessParty(
+            forceKilled: true,
+            isHero: effectedAgent.IsHero,
+            hasLeaderHero: false,
+            otherActivePartyTroops);
+    }
+
+    internal static bool ShouldForceKnockoutForLordlessParty(
+        bool forceKilled,
+        bool isHero,
+        bool hasLeaderHero,
+        int otherActivePartyTroops)
+    {
+        return forceKilled &&
+            !isHero &&
+            !hasLeaderHero &&
+            otherActivePartyTroops <= 0;
     }
 }
 

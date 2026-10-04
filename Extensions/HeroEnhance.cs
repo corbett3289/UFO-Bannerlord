@@ -12,9 +12,53 @@ namespace UFO.Extension
     {
         public static readonly TextObject RaidedText = new TextObject("{=RVas572P}Raided");
 
+        private static Clan PlayerClanOrNull()
+        {
+            return Hero.MainHero?.Clan;
+        }
+
+        private static bool CampaignHeroesReady()
+        {
+            if (!SubModule.CampaignReady && Campaign.Current != null && Hero.MainHero != null)
+            {
+                SubModule.MarkCampaignReady();
+            }
+
+            return SubModule.CampaignReady;
+        }
+
+        private static bool IsHeroReady(Hero hero)
+        {
+            return CampaignHeroesReady() && hero != null && hero.IsInitialized;
+        }
+
+        private static bool IsPlayerClanMember(Hero hero)
+        {
+            Clan playerClan = PlayerClanOrNull();
+            if (hero == null || playerClan == null)
+            {
+                return false;
+            }
+
+            if (hero == Hero.MainHero || hero.Clan == playerClan || hero.IsPlayerCompanion)
+            {
+                return true;
+            }
+
+            foreach (Hero clanHero in playerClan.Heroes)
+            {
+                if (clanHero == hero)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static int AgeScale(this Hero hero)
         {
-            if (Game.Current.PlayerTroop == null)
+            if (hero == null || Game.Current?.PlayerTroop == null)
             {
                 return -1;
             }
@@ -22,7 +66,7 @@ namespace UFO.Extension
             {
                 return -1;
             }
-            if (hero.Clan != Clan.PlayerClan)
+            if (!IsPlayerClanMember(hero))
             {
                 return 1;
             }
@@ -71,25 +115,15 @@ namespace UFO.Extension
 
         public static float CombatEnhanceRate(this Hero hero)
         {
-            if (hero == null || Campaign.Current == null)
+            if (!IsHeroReady(hero))
             {
                 return 0f;
             }
-
-            // Story Mode registers hero objects before Hero.MainHero and Clan.PlayerClan exist.
-            // Do not access those static properties until the player party has been created.
-            if (hero.CharacterObject?.IsPlayerCharacter == true)
+            if (hero == Hero.MainHero)
             {
                 return SettingsManager.CombatAttributeRatePlayer.Value;
             }
-
-            Clan playerClan = Campaign.Current.MainParty?.ActualClan;
-            if (playerClan == null)
-            {
-                return 0f;
-            }
-
-            if (hero.Clan == playerClan)
+            if (IsPlayerClanMember(hero))
             {
                 return SettingsManager.CombatAttributeRateClanMember.Value;
             }
@@ -118,22 +152,15 @@ namespace UFO.Extension
 
         public static float StrategyEnhanceRate(this Hero hero)
         {
-            if (hero == null || Campaign.Current == null)
+            if (!IsHeroReady(hero))
             {
                 return 0f;
             }
-            if (hero.CharacterObject?.IsPlayerCharacter == true)
+            if (hero == Hero.MainHero)
             {
                 return SettingsManager.StrategyAttributeRatePlayer.Value;
             }
-
-            Clan playerClan = Campaign.Current.MainParty?.ActualClan;
-            if (playerClan == null)
-            {
-                return 0f;
-            }
-
-            if (hero.Clan == playerClan)
+            if (IsPlayerClanMember(hero))
             {
                 return SettingsManager.StrategyAttributeRateClanMember.Value;
             }
@@ -142,27 +169,17 @@ namespace UFO.Extension
 
         public static int EnhanceType(this CharacterObject character)
         {
-            Hero heroObject = character?.HeroObject;
-            if (heroObject == null)
+            if (character == null)
             {
                 return -1;
             }
-            if (heroObject.CharacterObject?.IsPlayerCharacter == true)
-            {
-                return 1;
-            }
-
-            Clan playerClan = Campaign.Current?.MainParty?.ActualClan;
-            if (playerClan != null && heroObject.Clan == playerClan)
-            {
-                return 0;
-            }
-            return 2;
+            Hero heroObject = character.HeroObject;
+            return heroObject.EnhanceType();
         }
 
         public static int EnhanceType(this Hero hero)
         {
-            if (hero == null)
+            if (!IsHeroReady(hero))
             {
                 return -1;
             }
@@ -170,7 +187,7 @@ namespace UFO.Extension
             {
                 return 1;
             }
-            if (hero.Clan == Clan.PlayerClan)
+            if (IsPlayerClanMember(hero))
             {
                 return 0;
             }
@@ -179,30 +196,65 @@ namespace UFO.Extension
 
         public static void AddBothBranchPerks(this Hero hero)
         {
-            if (!hero.IsAlive)
+            AddBothBranchPerks(hero, SettingsManager.AutoChoosePerk.Value);
+        }
+
+        public static void AddBothBranchPerks(this Hero hero, AutoChoosePerk_Type scope)
+        {
+            if (!IsHeroReady(hero) || !hero.IsAlive || hero.HeroDeveloper == null)
             {
                 return;
             }
 
-            if ((int)SettingsManager.AutoChoosePerk.Value != hero.EnhanceType())
+            if (!ShouldAddBothBranchPerks(scope, hero))
             {
-                if (hero.EnhanceType() == 1 && (int)SettingsManager.AutoChoosePerk.Value == 0)
-                {
-                }
-                else
-                {
-                    return;
-                }
+                return;
             }
-
 
             foreach (PerkObject item in PerkObject.All)
             {
                 SkillObject skill = item.Skill;
-                if (hero.GetSkillValue(skill) >= item.RequiredSkillValue && !hero.GetPerkValue(item))
+                if (skill != null &&
+                    hero.GetSkillValue(skill) >= item.RequiredSkillValue &&
+                    !hero.GetPerkValue(item))
                 {
                     hero.HeroDeveloper.AddPerk(item);
                 }
+            }
+        }
+
+        internal static bool ShouldAddBothBranchPerks(AutoChoosePerk_Type scope, Hero hero)
+        {
+            if (hero == null)
+            {
+                return false;
+            }
+
+            switch (scope)
+            {
+                case AutoChoosePerk_Type.Clan:
+                    return IsPlayerClanMember(hero);
+                case AutoChoosePerk_Type.Player:
+                    return hero == Hero.MainHero;
+                case AutoChoosePerk_Type.All:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool ShouldAddBothBranchPerks(AutoChoosePerk_Type scope, int heroType)
+        {
+            switch (scope)
+            {
+                case AutoChoosePerk_Type.Clan:
+                    return heroType == 0 || heroType == 1;
+                case AutoChoosePerk_Type.Player:
+                    return heroType == 1;
+                case AutoChoosePerk_Type.All:
+                    return heroType >= 0;
+                default:
+                    return false;
             }
         }
 

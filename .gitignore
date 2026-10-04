@@ -364,3 +364,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Isolated UFO builds, staged packages, and prepared Workshop descriptors
+/artifacts/
+!/Tools/Release/
+!/Tools/Release/**

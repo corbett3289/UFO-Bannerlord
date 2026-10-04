@@ -805,6 +805,7 @@ public class BannerlordCheatsGlobalSettings : AttributeGlobalSettings<Bannerlord
     [LocalizedSettingPropertyGroup("MeleeDefense")] [LocalizedSettingPropertyMultiplier("PlayerPartyMeleeAiParryDecisionMultiplier")] public float PlayerPartyMeleeAiParryDecisionMultiplier { get; set; } = 1f;
     [LocalizedSettingPropertyGroup("MeleeDefense")] [LocalizedSettingPropertyMultiplier("PlayerPartyMeleeAiShieldDefenseMultiplier")] public float PlayerPartyMeleeAiShieldDefenseMultiplier { get; set; } = 1f;
 
+#if UFO_NAVALDLC
     [LocalizedSettingPropertyGroup("NavalDLC", GroupOrder = 30)]
     [LocalizedSettingPropertyFloatingInteger("NavalCampaignSpeedMultiplier", 0.1f, 10f)] public float NavalCampaignSpeedMultiplier { get; set; } = 1f;
     [LocalizedSettingPropertyGroup("NavalDLC")] [LocalizedSettingPropertyFloatingInteger("NavalOarForceMultiplier", 0.1f, 10f)] public float NavalOarForceMultiplier { get; set; } = 1f;
@@ -868,4 +869,5 @@ public class BannerlordCheatsGlobalSettings : AttributeGlobalSettings<Bannerlord
         get => NavalDlcCompatibility.AddAllShipUpgradePieces;
         set { }
     }
+#endif
 }

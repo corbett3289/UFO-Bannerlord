@@ -12,6 +12,19 @@ using UFO.Setting;
 
 namespace UFO.Patching;
 
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+internal sealed class NavalPatchTargetAttribute : Attribute
+{
+    internal string TypeName { get; }
+    internal string MethodName { get; }
+
+    public NavalPatchTargetAttribute(string typeName, string methodName)
+    {
+        TypeName = typeName;
+        MethodName = methodName;
+    }
+}
+
 /// <summary>
 /// Optional Naval DLC integration. This file deliberately contains no NavalDLC type reference:
 /// UFO therefore remains loadable when the DLC is not installed.
@@ -20,42 +33,19 @@ internal static class NavalDlcCompatibility
 {
     private const string NavalAssemblyName = "NavalDLC";
 
-    internal static void Apply(Harmony harmony)
+    internal static IReadOnlyList<string> Apply(Harmony harmony)
     {
+        var failures = new List<string>();
         if (!IsAvailable())
-            return;
+            return failures;
 
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetCampaignSpeedBonusFactor", nameof(CampaignSpeedBonus));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetMaxOarForceFactor", nameof(OarForce));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetSailForceFactor", nameof(SailForce));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetCrewCapacityBonusFactor", nameof(CrewCapacity));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetDefaultCombatFactor", nameof(ShipCombatFactor));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetAdditionalAmmoBonus", nameof(AdditionalAmmo));
-
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipDamageModel", "GetHourlyShipDamage", nameof(SeaAttrition));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCCampaignShipDamageModel", "GetShipDamage", nameof(BattleShipDamage));
-
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCStormModel", "GetPositionDamageForStorm", nameof(StormDamage));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCStormModel", "GetHourlyStormSpawnChanceForPosition", nameof(StormFrequency));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCStormModel", "GetMaximumWeatherStrengthAtEye", nameof(StormStrength));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCStormModel", "GetHourlyIntensityChangeForStorm", nameof(StormStrength));
-
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCShipCostModel", "GetShipTradeValue", nameof(ShipPurchaseCost));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCShipCostModel", "GetShipRepairCost", nameof(ShipRepairCost));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCShipCostModel", "GetShipUpgradePieceCost", nameof(ShipUpgradeCost));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCShipDeploymentModel", "GetShipDeploymentLimit", nameof(DeploymentLimit));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCFleetManagementModel", "get_MinimumTroopCountRequiredToSendShips", nameof(FleetMinimumTroops));
-
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCBattleRewardModel", "CalculateRenownGain", nameof(NavalRenown));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCBattleRewardModel", "CalculateInfluenceGain", nameof(NavalInfluence));
-
-        // Existing generic map options target Native models only; apply them to DLC replacements too.
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCPartySpeedCalculationModel", "CalculateFinalSpeed", nameof(ExistingMapSpeed));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCMapVisibilityModel", "GetPartySpottingRange", nameof(ExistingMapVisibility));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCMobilePartyFoodConsumptionModel", "CalculateDailyFoodConsumptionf", nameof(ExistingFoodConsumption));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCPartyWageModel", "GetTotalWage", nameof(ExistingWages));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCPartyHealingModel", "GetDailyHealingHpForHeroes", nameof(ExistingHeroHealing));
-        Patch(harmony, "NavalDLC.GameComponents.NavalDLCPartyHealingModel", "GetDailyHealingForRegulars", nameof(ExistingTroopHealing));
+        foreach (var callback in typeof(NavalDlcCompatibility).GetMethods(BindingFlags.Static | BindingFlags.NonPublic))
+        {
+            foreach (var target in callback.GetCustomAttributes<NavalPatchTargetAttribute>())
+                Patch(harmony, target, callback, failures);
+        }
+        // Generic options are applied by Native postfixes through the DLC's BaseModel chain.
+        return failures;
     }
 
     internal static void GrantShip(string shipId) => InvokeCheat("AddShipToPlayer", shipId);
@@ -218,21 +208,45 @@ internal static class NavalDlcCompatibility
 
     private static bool IsAvailable() => AppDomain.CurrentDomain.GetAssemblies().Any(a => string.Equals(a.GetName().Name, NavalAssemblyName, StringComparison.OrdinalIgnoreCase));
 
-    private static void Patch(Harmony harmony, string typeName, string methodName, string callbackName)
+    private static void Patch(Harmony harmony, NavalPatchTargetAttribute target, MethodInfo callback, List<string> failures)
     {
+        string label = target.TypeName + "." + target.MethodName;
         try
         {
-            var type = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType(typeName, false)).FirstOrDefault(t => t != null);
-            var original = type?.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .FirstOrDefault(m => m.Name == methodName);
-            var callback = typeof(NavalDlcCompatibility).GetMethod(callbackName, BindingFlags.Static | BindingFlags.NonPublic);
-            if (original != null && callback != null)
-                harmony.Patch(original, postfix: new HarmonyMethod(callback));
+            var type = FindLoadedType(target.TypeName) ?? throw new TypeLoadException(target.TypeName);
+            var originals = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(method => method.Name == target.MethodName && HasCompatibleBindings(method, callback))
+                .ToArray();
+            if (originals.Length != 1)
+                throw new MissingMethodException($"Expected one compatible overload for {label}, found {originals.Length}.");
+            harmony.Patch(originals[0], postfix: new HarmonyMethod(callback));
         }
         catch (Exception exception)
         {
+            failures.Add(label);
+            InformationManager.DisplayMessage(new InformationMessage($"UFO patch skipped: {label} ({exception.Message})", Colors.Red));
             SubModule.LogError(exception, typeof(NavalDlcCompatibility));
         }
+    }
+
+    private static bool HasCompatibleBindings(MethodInfo original, MethodInfo callback)
+    {
+        var parameters = original.GetParameters().ToDictionary(parameter => parameter.Name);
+        foreach (var parameter in callback.GetParameters())
+        {
+            var callbackType = parameter.ParameterType.IsByRef ? parameter.ParameterType.GetElementType() : parameter.ParameterType;
+            if (parameter.Name == "__result")
+            {
+                if (callbackType != original.ReturnType) return false;
+            }
+            else
+            {
+                if (!parameters.TryGetValue(parameter.Name, out var bound)) return false;
+                var originalType = bound.ParameterType.IsByRef ? bound.ParameterType.GetElementType() : bound.ParameterType;
+                if (!callbackType.IsAssignableFrom(originalType)) return false;
+            }
+        }
+        return true;
     }
 
     private static bool IsPlayerOwned(object value, int depth = 0)
@@ -250,28 +264,41 @@ internal static class NavalDlcCompatibility
         return false;
     }
 
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetCampaignSpeedBonusFactor")]
     private static void CampaignSpeedBonus(object ship, ref float __result) { if (IsPlayerOwned(ship)) __result *= SettingsManager.NavalCampaignSpeedMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetMaxOarForceFactor")]
     private static void OarForce(object ship, ref float __result) { if (IsPlayerOwned(ship)) __result *= SettingsManager.NavalOarForceMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetSailForceFactor")]
     private static void SailForce(object ship, ref float __result) { if (IsPlayerOwned(ship)) __result *= SettingsManager.NavalSailForceMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetCrewCapacityBonusFactor")]
     private static void CrewCapacity(object ship, ref float __result) { if (IsPlayerOwned(ship)) __result *= SettingsManager.NavalCrewCapacityMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetDefaultCombatFactor")]
     private static void ShipCombatFactor(object shipHull, ref float __result) { __result *= SettingsManager.NavalShipCombatFactorMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipParametersModel", "GetAdditionalAmmoBonus")]
     private static void AdditionalAmmo(object ship, ref int __result) { if (IsPlayerOwned(ship)) __result += SettingsManager.NavalAdditionalAmmo.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipDamageModel", "GetHourlyShipDamage")]
     private static void SeaAttrition(object owner, ref int __result) { if (IsPlayerOwned(owner)) __result = (int)Math.Round(__result * SettingsManager.NavalSeaAttritionPercentage.Value / 100f); }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCCampaignShipDamageModel", "GetShipDamage")]
     private static void BattleShipDamage(object ship, ref float __result) { if (IsPlayerOwned(ship)) __result *= SettingsManager.NavalBattleShipDamagePercentage.Value / 100f; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCStormModel", "GetPositionDamageForStorm")]
     private static void StormDamage(object ship, ref float __result) { if (IsPlayerOwned(ship)) __result *= SettingsManager.NavalStormDamagePercentage.Value / 100f; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCStormModel", "GetHourlyStormSpawnChanceForPosition")]
     private static void StormFrequency(ref float __result) { __result *= SettingsManager.NavalStormFrequencyMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCStormModel", "GetMaximumWeatherStrengthAtEye")]
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCStormModel", "GetHourlyIntensityChangeForStorm")]
     private static void StormStrength(ref float __result) { __result *= SettingsManager.NavalStormStrengthMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCShipCostModel", "GetShipTradeValue")]
     private static void ShipPurchaseCost(object buyer, ref float __result) { if (IsPlayerOwned(buyer)) __result *= SettingsManager.NavalShipPurchaseCostMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCShipCostModel", "GetShipRepairCost")]
     private static void ShipRepairCost(object owner, ref float __result) { if (IsPlayerOwned(owner)) __result *= SettingsManager.NavalShipRepairCostMultiplier.Value; }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCShipCostModel", "GetShipUpgradePieceCost")]
     private static void ShipUpgradeCost(object owner, ref int __result) { if (IsPlayerOwned(owner)) __result = (int)Math.Round(__result * SettingsManager.NavalShipUpgradeCostMultiplier.Value); }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCShipDeploymentModel", "GetShipDeploymentLimit")]
     private static void DeploymentLimit(object party, ref int __result) { if (IsPlayerOwned(party)) __result = Math.Max(1, (int)Math.Round(__result * SettingsManager.NavalDeploymentLimitMultiplier.Value)); }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCFleetManagementModel", "get_MinimumTroopCountRequiredToSendShips")]
     private static void FleetMinimumTroops(ref int __result) { __result = Math.Max(0, (int)Math.Round(__result * SettingsManager.NavalFleetMinimumTroopPercentage.Value / 100f)); }
-    private static void NavalRenown(PartyBase winnerParty, ref ExplainedNumber __result) { if (winnerParty.IsPlayerParty()) { __result.AddMultiplier(SettingsManager.NavalBattleRewardMultiplier.Value); if (SettingsManager.RenownRewardMultiplier.IsChanged) __result.AddMultiplier(SettingsManager.RenownRewardMultiplier.Value); } }
-    private static void NavalInfluence(PartyBase winnerParty, ref ExplainedNumber __result) { if (winnerParty.IsPlayerParty()) { __result.AddMultiplier(SettingsManager.NavalBattleRewardMultiplier.Value); if (SettingsManager.InfluenceRewardMultiplier.IsChanged) __result.AddMultiplier(SettingsManager.InfluenceRewardMultiplier.Value); } }
-    private static void ExistingMapSpeed(MobileParty mobileParty, ref ExplainedNumber __result) { if (mobileParty.IsPlayerParty() && SettingsManager.MapSpeedMultiplier.IsChanged) __result.AddMultiplier(SettingsManager.MapSpeedMultiplier.Value); }
-    private static void ExistingMapVisibility(MobileParty party, ref ExplainedNumber __result) { if (party.IsPlayerParty() && SettingsManager.MapVisibilityMultiplier.IsChanged) __result.AddMultiplier(SettingsManager.MapVisibilityMultiplier.Value); }
-    private static void ExistingFoodConsumption(MobileParty party, ref ExplainedNumber __result) { if (party.IsPlayerParty() && SettingsManager.FoodConsumptionPercentage.IsChanged) __result.AddPercentage(SettingsManager.FoodConsumptionPercentage.Value); }
-    private static void ExistingWages(MobileParty mobileParty, ref ExplainedNumber __result) { if (mobileParty != null && mobileParty.IsPlayerParty() && SettingsManager.TroopWagesPercentage.IsChanged) __result.AddPercentage(SettingsManager.TroopWagesPercentage.Value); }
-    private static void ExistingHeroHealing(PartyBase partyBase, ref ExplainedNumber __result) { if (partyBase.IsPlayerParty() && SettingsManager.PartyHealingMultiplier.IsChanged) __result.AddMultiplier(SettingsManager.PartyHealingMultiplier.Value); }
-    private static void ExistingTroopHealing(PartyBase partyBase, ref ExplainedNumber __result) { if (partyBase.IsPlayerParty() && SettingsManager.PartyHealingMultiplier.IsChanged) __result.AddMultiplier(SettingsManager.PartyHealingMultiplier.Value); }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCBattleRewardModel", "CalculateRenownGain")]
+    private static void NavalRenown(PartyBase winnerParty, ref ExplainedNumber __result) { if (winnerParty.IsPlayerParty()) __result.AddMultiplier(SettingsManager.NavalBattleRewardMultiplier.Value); }
+    [NavalPatchTarget("NavalDLC.GameComponents.NavalDLCBattleRewardModel", "CalculateInfluenceGain")]
+    private static void NavalInfluence(PartyBase winnerParty, ref ExplainedNumber __result) { if (winnerParty.IsPlayerParty()) __result.AddMultiplier(SettingsManager.NavalBattleRewardMultiplier.Value); }
 }

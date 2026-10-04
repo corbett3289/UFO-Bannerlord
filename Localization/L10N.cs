@@ -68,7 +68,18 @@ public static class L10N
         LocalizationResourceLoader.Overlay(Values, directory, "English.resx", required: true);
         string requestedLanguage = EnumExtensions.ToLanguage(SettingsManager.LanguageSetting.Value);
         if (!string.Equals(requestedLanguage, "English.resx", StringComparison.OrdinalIgnoreCase))
-            LocalizationResourceLoader.Overlay(Values, directory, requestedLanguage, required: false);
+        {
+            try
+            {
+                LocalizationResourceLoader.Overlay(Values, directory, requestedLanguage, required: false);
+            }
+            catch (Exception exception) when (exception is System.Xml.XmlException || exception is IOException)
+            {
+                // Keep the already loaded English strings when an optional translation is invalid.
+                try { UFO.Diagnostics.ModDiagnostics.WriteError(exception, typeof(L10N)); }
+                catch { }
+            }
+        }
     }
 
     public static string GetText(string key)

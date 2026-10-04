@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.Core;
@@ -18,6 +18,7 @@ internal static class CampaignStarterConfigurator
 
         campaignStarter.AddBehavior(new SavingWeaponProperties.CustomBehavior());
         campaignStarter.AddBehavior(new AddMoney());
+        campaignStarter.AddBehavior(new AutoChoosePerks());
         ReplaceModel<DefaultCharacterDevelopmentModel, ModifiedCharacterDevelopmentModel>(starter);
     }
 
@@ -31,19 +32,10 @@ internal static class CampaignStarterConfigurator
         where TBase : GameModel
         where TReplacement : TBase
     {
-        if (starter.Models is not IList<GameModel> models)
+        if (starter.Models.OfType<TReplacement>().Any())
             return;
 
-        var replaced = false;
-        for (var index = 0; index < models.Count; index++)
-        {
-            if (models[index] is not TBase)
-                continue;
-            models[index] = Activator.CreateInstance<TReplacement>();
-            replaced = true;
-        }
-
-        if (!replaced)
-            starter.AddModel(Activator.CreateInstance<TReplacement>());
+        // Registering a later model is Bannerlord's supported override mechanism.
+        starter.AddModel(Activator.CreateInstance<TReplacement>());
     }
 }

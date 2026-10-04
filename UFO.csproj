@@ -1,119 +1,72 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFramework>net480</TargetFramework>
-		<BuildForWindows>false</BuildForWindows>
-		<BuildForWindowsStore>false</BuildForWindowsStore>
-		<LangVersion>12.0</LangVersion>
-		<ModuleId>$(MSBuildProjectName)</ModuleId>
-		<ModuleName>$(MSBuildProjectName)</ModuleName>
-		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-		<Platforms>x64</Platforms>
-		<BuildForWindows>true</BuildForWindows>
-		<OutPutPath>Module\bin\Win64_Shipping_Client\</OutPutPath>
-		<!-- Set GameFolder in a local .props file or on the MSBuild command line. -->
-		<GameFolder Condition="'$(GameFolder)' == ''">E:\SteamLibrary\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
-		<!-- Deployment is opt-in because it replaces the game's complete module bin folder. -->
-		<DeployToGameFolder Condition="'$(DeployToGameFolder)' == ''">true</DeployToGameFolder>
-		<DeployModuleFolder>$(GameFolder)\Modules\UFO</DeployModuleFolder>
-		<DeployBinFolder>$(DeployModuleFolder)\bin</DeployBinFolder>
-		<GameBinariesFolder Condition="Exists('$(GameFolder)\bin\Win64_Shipping_Client\Bannerlord.exe')">Win64_Shipping_Client</GameBinariesFolder>
-		<GameBinariesFolder Condition="Exists('$(GameFolder)\bin\Gaming.Desktop.x64_Shipping_Client\Bannerlord.exe')">Gaming.Desktop.x64_Shipping_Client</GameBinariesFolder>
-		<PlatformTarget>x64</PlatformTarget>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<OutputPath>$(OutPutPath)</OutputPath>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<OutputPath>bin\Debug\</OutputPath>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Reference Include="$(GameFolder)\bin\$(GameBinariesFolder)\Newtonsoft.Json.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\bin\$(GameBinariesFolder)\TaleWorlds.*.dll" Exclude="$(GameFolder)\bin\$(GameBinariesFolder)\TaleWorlds.Native.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\Native\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\SandBox\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\SandBoxCore\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\StoryMode\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\CustomBattle\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\BirthAndDeath\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="$(GameFolder)\Modules\NavalDLC\bin\$(GameBinariesFolder)\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference>
-
-
-		<!--Shokuho-->
-		<!--
-		<Reference Include="E:\SteamLibrary\steamapps\workshop\content\261550\3496296180\bin\Win64_Shipping_Client\*.dll">
-			<HintPath>%(Identity)</HintPath>
-			<Private>False</Private>
-		</Reference> 
-		-->
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Bannerlord.ButterLib" Version="2.10.2" />
-		<PackageReference Include="Bannerlord.MCM" Version="5.11.3" />
-		<PackageReference Include="Bannerlord.UIExtenderEx" Version="2.13.2" />
-		<PackageReference Include="Lib.Harmony" Version="2.4.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<!-- Standalone compatibility tooling is not part of the game module. -->
-		<Compile Remove="Tools\**\*.cs" />
-		<None Include="Module\bin\Win64_Shipping_Client\*" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Module\bin\Win64_Shipping_Client\UFO.dll" />
-	  <None Remove="Module\bin\Win64_Shipping_Client\UFO.pdb" />
-	</ItemGroup>
-
-	<Target Name="CopyOutputToModFolder" AfterTargets="Build" Condition="'$(DeployToGameFolder)' == 'true'">
-		<RemoveDir Directories="$(DeployBinFolder)" />
-		<MakeDir Directories="$(DeployBinFolder)" />
-
-		<ItemGroup>
-			<FilesToCopy Include="Module\bin\**\*.*" />
-		</ItemGroup>
-		
-		<Copy SourceFiles="@(FilesToCopy)" DestinationFiles="@(FilesToCopy->'$(DeployBinFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
-		<Copy SourceFiles="Module\SubModule.xml" DestinationFolder="$(DeployModuleFolder)\" SkipUnchangedFiles="true" />
-	</Target>
-
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>UFO</AssemblyName>
+    <RootNamespace>UFO</RootNamespace>
+    <Version>1.0.19</Version>
+    <AssemblyVersion>1.0.19.0</AssemblyVersion>
+    <FileVersion>1.0.19.0</FileVersion>
+    <AssemblyTitle>UFO</AssemblyTitle>
+    <Product>UFO's Cheat Mods Bundle</Product>
+    <Authors>UFOdestiny and original bundled mod authors; maintained by Arcayon</Authors>
+    <!-- Debug launch properties only; the project never deploys after a build. -->
+    <GameFolder Condition="'$(GameFolder)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Mount &amp; Blade II Bannerlord</GameFolder>
+    <GameBinariesFolder Condition="'$(GameBinariesFolder)' == ''">Win64_Shipping_Client</GameBinariesFolder>
+    <GameBinariesFolder Condition="Exists('$(GameFolder)\bin\Gaming.Desktop.x64_Shipping_Client\Bannerlord.exe')">Gaming.Desktop.x64_Shipping_Client</GameBinariesFolder>
+    <Edition Condition="'$(Edition)' == ''">WarSails</Edition>
+    <GameReferenceVersion Condition="'$(GameReferenceVersion)' == ''">1.5.3.122374-beta</GameReferenceVersion>
+    <OutputRoot Condition="'$(OutputRoot)' == ''">$(MSBuildProjectDirectory)\artifacts\</OutputRoot>
+    <OutputPath>$(OutputRoot)\build\$(Edition)\</OutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <Deterministic>true</Deterministic>
+    <DebugType>portable</DebugType>
+    <PathMap>$(MSBuildProjectDirectory)=/_/UFO</PathMap>
+    <DefaultItemExcludes>$(DefaultItemExcludes);artifacts\**</DefaultItemExcludes>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Edition)' == 'WarSails'">
+    <DefineConstants>$(DefineConstants);UFO_NAVALDLC</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Bannerlord.ButterLib" Version="2.11.1" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.MCM" Version="5.12.3" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.13.2" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
+  <!-- Component packages keep the no-War-Sails build independent of the DLC. -->
+  <ItemGroup Condition="'$(ReferenceRoot)' == ''">
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.Core" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.Native" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.SandBox" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.StoryMode" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.CustomBattle" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.BirthAndDeath" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Bannerlord.ReferenceAssemblies.NavalDLC" Version="$(GameReferenceVersion)" PrivateAssets="all" ExcludeAssets="runtime" Condition="'$(Edition)' == 'WarSails'" />
+  </ItemGroup>
+  <!-- A reference snapshot must contain one copy of each managed assembly. -->
+  <ItemGroup Condition="'$(ReferenceRoot)' != ''">
+    <Reference Include="$(ReferenceRoot)\**\*.dll" Exclude="$(ReferenceRoot)\**\NavalDLC*.dll;$(ReferenceRoot)\**\TaleWorlds.Native.dll">
+      <HintPath>%(Identity)</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="$(ReferenceRoot)\**\NavalDLC*.dll" Condition="'$(Edition)' == 'WarSails'">
+      <HintPath>%(Identity)</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Tools\**\*.cs;obj\**\*.cs;artifacts\**\*.cs" />
+    <Compile Remove="Patching\NavalDlcCompatibility.cs" Condition="'$(Edition)' == 'NoWarSails'" />
+  </ItemGroup>
+  <Target Name="ValidateEdition" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(Edition)' != 'WarSails' and '$(Edition)' != 'NoWarSails'" Text="Edition must be WarSails or NoWarSails." />
+    <Error Condition="'$(ReferenceRoot)' != '' and !Exists('$(ReferenceRoot)')" Text="ReferenceRoot does not exist: $(ReferenceRoot)" />
+  </Target>
+  <!-- Deployment is only performed by Tools/Release/Build-Release.ps1 -Deploy. -->
 </Project>

@@ -1,0 +1,42 @@
+{
+  "release": "1.0.19",
+  "status": "candidate-runtime-checks-pending",
+  "gameVersion": "1.5.3",
+  "gameReference": "1.5.3.122374-beta",
+  "steamBuild": 25302170,
+  "navalDlcVersion": "1.3.3",
+  "staticAuditRunsPassed": 8,
+  "auditorSelfTestsPassed": 7,
+  "historicalExecutableValidation": "skipped; older game versions unsupported",
+  "editions": [
+    {
+      "edition": "WarSails",
+      "moduleId": "UFO15",
+      "sha256": "6e705a872c4f394ee9d42ee4560205a76af600e3ba211d31cc9d8348362ad59c",
+      "maintainedRegressionChecksPassed": 200,
+      "harmonyCallbacksChecked": 189,
+      "directGameMembersChecked": 403,
+      "navalTargetsChecked": 19,
+      "reflectedContractsChecked": 28,
+      "implementationContractsPassed": 9,
+      "campaignSmokeTest": "pending",
+      "workshopItemId": null
+    },
+    {
+      "edition": "NoWarSails",
+      "moduleId": "UFONoWarSails15",
+      "sha256": "8cdbe8b3694dbd7594768239a8d913bcd8af689ada15204793a456a44639830e",
+      "maintainedRegressionChecksPassed": 200,
+      "harmonyCallbacksChecked": 189,
+      "directGameMembersChecked": 403,
+      "navalTargetsChecked": 0,
+      "reflectedContractsChecked": 18,
+      "implementationContractsPassed": 1,
+      "hardNavalDependency": false,
+      "campaignSmokeTest": "pending",
+      "workshopItemId": null
+    }
+  ],
+  "automationBlock": "Windows screen capture times out in both root and child contexts, for Bannerlord and Steam",
+  "publication": "pending campaign and combat checks, private upload verification, then public visibility"
+}

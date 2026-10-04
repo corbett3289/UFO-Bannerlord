@@ -1,7 +1,11 @@
 using HarmonyLib;
 using SandBox.GameComponents;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.CharacterDevelopment;
 using TaleWorlds.CampaignSystem.GameComponents;
 using TaleWorlds.CampaignSystem.Party;
@@ -115,17 +119,43 @@ internal class CombatAttrEnhance
         }
     }
 
-    [HarmonyPatch(typeof(DefaultPartyHealingModel), "GetHeroesEffectedHealingAmount")]
-    internal class GetHeroesEffectedHealingAmountPostfixPatch
+    [HarmonyPatch(typeof(PartyHealCampaignBehavior), "HealMemberHeroes",
+        new Type[] { typeof(PartyBase), typeof(float) },
+        new ArgumentType[] { ArgumentType.Normal, ArgumentType.Ref })]
+    internal class MemberHeroEnduranceHealingPatch
     {
-        private static void Postfix(ref int __result, ref Hero hero, ref float healingRate)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            float num = hero.CombatEnhanceRate();
-            if (num != 0f)
+            var rewritten = instructions.Select(instruction => new CodeInstruction(instruction)).ToList();
+            var heal = AccessTools.DeclaredMethod(typeof(Hero), nameof(Hero.Heal), new[] { typeof(int), typeof(bool) });
+            var matches = rewritten.Where(instruction => instruction.Calls(heal)).ToArray();
+            if (matches.Length != 1)
+                throw new InvalidOperationException($"Expected one Hero.Heal call in HealMemberHeroes, found {matches.Length}.");
+
+            // Preserve Native's sea-dependent perks, traits, rounding, and XP flag.
+            // Prisoner recovery uses a separate capped Native path and is untouched.
+            matches[0].opcode = OpCodes.Call;
+            matches[0].operand = AccessTools.DeclaredMethod(typeof(MemberHeroEnduranceHealingPatch), nameof(HealWithEndurance));
+            return rewritten;
+        }
+
+        private static void HealWithEndurance(Hero hero, int healAmount, bool addXp)
+        {
+            int enhancedAmount = healAmount;
+            try
             {
-                int attributeValue = hero.GetAttributeValue(DefaultCharacterAttributes.Endurance);
-                __result = (int)((float)__result * (1f + (float)attributeValue * SettingsManager.EnduranceHealRate.Value * num));
+                float rate = hero.CombatEnhanceRate();
+                if (rate != 0f)
+                {
+                    int endurance = hero.GetAttributeValue(DefaultCharacterAttributes.Endurance);
+                    enhancedAmount = (int)(healAmount * (1f + endurance * SettingsManager.EnduranceHealRate.Value * rate));
+                }
             }
+            catch (Exception exception)
+            {
+                SubModule.LogError(exception, typeof(MemberHeroEnduranceHealingPatch));
+            }
+            hero.Heal(enhancedAmount, addXp);
         }
     }
 

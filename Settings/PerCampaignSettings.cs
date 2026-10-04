@@ -1,10 +1,12 @@
 using MCM.Abstractions.Base.PerCampaign;
+using MCM.Abstractions.Base.Global;
 using MCM.Common;
 using System;
 using System.Reflection;
 using UFO.Patching;
 using TaleWorlds.CampaignSystem;
 using UFO.Localization;
+using UFO.Extension;
 
 namespace UFO.Setting;
 
@@ -15,6 +17,20 @@ public class BannerlordCheatsPerCampaignSettings : AttributePerCampaignSettings<
     public override string FolderName { get; } = "UFO_C";
 
     public override string DisplayName => "UFO's Cheat (Local)";
+
+    public BannerlordCheatsPerCampaignSettings()
+    {
+        BannerlordCheatsGlobalSettings global =
+            GlobalSettings<BannerlordCheatsGlobalSettings>.Instance;
+        if (global != null)
+        {
+            OneHitKill = global.OneHitKill;
+            PartyOneHitKill = global.PartyOneHitKill;
+            AutoChoosePerk =
+                LocalizedDropdownValue<AutoChoosePerk_Type>.GenerateDropdown(
+                    global.AutoChoosePerk.GetValue());
+        }
+    }
 
 
     // UFO's
@@ -819,6 +835,7 @@ public class BannerlordCheatsPerCampaignSettings : AttributePerCampaignSettings<
     [LocalizedSettingPropertyGroup("MeleeDefense")] [LocalizedSettingPropertyMultiplier("PlayerPartyMeleeAiParryDecisionMultiplier")] public float PlayerPartyMeleeAiParryDecisionMultiplier { get; set; } = 1f;
     [LocalizedSettingPropertyGroup("MeleeDefense")] [LocalizedSettingPropertyMultiplier("PlayerPartyMeleeAiShieldDefenseMultiplier")] public float PlayerPartyMeleeAiShieldDefenseMultiplier { get; set; } = 1f;
 
+#if UFO_NAVALDLC
     [LocalizedSettingPropertyGroup("NavalDLC", GroupOrder = 30)]
     [LocalizedSettingPropertyFloatingInteger("NavalCampaignSpeedMultiplier", 0.1f, 10f)] public float NavalCampaignSpeedMultiplier { get; set; } = 1f;
     [LocalizedSettingPropertyGroup("NavalDLC")] [LocalizedSettingPropertyFloatingInteger("NavalOarForceMultiplier", 0.1f, 10f)] public float NavalOarForceMultiplier { get; set; } = 1f;
@@ -882,4 +899,5 @@ public class BannerlordCheatsPerCampaignSettings : AttributePerCampaignSettings<
         get => NavalDlcCompatibility.AddAllShipUpgradePieces;
         set { }
     }
+#endif
 }
