@@ -20,7 +20,10 @@
       "reflectedContractsChecked": 28,
       "implementationContractsPassed": 9,
       "campaignSmokeTest": "pending",
-      "workshopItemId": null
+      "workshopItemId": null,
+      "mainMenuSmokeTest": "passed on final DLL with NavalDLC1.3.3; game log 3856",
+      "archive": "UFO-1.0.19-Bannerlord-1.5.3-WarSails.zip",
+      "archiveSha256": "eab307b1be5c80f7f3a1b0ad36b16c6c42c65a7e3f026473d6077898bd9afa71"
     },
     {
       "edition": "NoWarSails",
@@ -34,7 +37,10 @@
       "implementationContractsPassed": 1,
       "hardNavalDependency": false,
       "campaignSmokeTest": "pending",
-      "workshopItemId": null
+      "workshopItemId": null,
+      "mainMenuSmokeTest": "passed on final DLL with NavalDLC disabled; game log 6816",
+      "archive": "UFO-1.0.19-Bannerlord-1.5.3-NoWarSails.zip",
+      "archiveSha256": "eeb0844e735ec81d8149fc537a5426a9449d3fd45511844f5cc29039b4b13be1"
     }
   ],
   "automationBlock": "Windows screen capture times out in both root and child contexts, for Bannerlord and Steam",

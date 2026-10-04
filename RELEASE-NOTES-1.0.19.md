@@ -20,9 +20,16 @@ Completed against the final v1.5.3-only binaries:
 - Live v1.5.3 IL inspection validated nine War Sails implementation contracts and one no-War-Sails healing contract.
 - Each staged package had its expected module ID, module version `v1.0.19`, assembly version `1.0.19.0`, full source content and only `UFO.dll` as a binary.
 
-The local War Sails edition reached the v1.5.3 main menu, and game logs showed no UFO diagnostic errors. Both final editions were rebuilt against the v1.5.3 baseline, passed the final checks and were installed in their new module folders. Campaign testing is pending because computer screen capture is currently unavailable through the automation tools. Remaining runtime checks cover MCM initialization, a new campaign, save/reload perk recovery, hotkeys and combat; War Sails additionally requires ship and fleet checks. Historical executable IL and gameplay were not verified and older versions are excluded. Static or regression checks and a menu load do not substitute for a campaign playtest.
+Both final editions reached the v1.5.3 main menu, and game logs showed no UFO diagnostic errors. The no-War-Sails launch omitted NavalDLC. Both final editions were rebuilt against the v1.5.3 baseline, passed the final checks and were installed in their new module folders. Campaign testing is pending because computer screen capture is currently unavailable through the automation tools. Remaining runtime checks cover MCM initialization, a new campaign, save/reload perk recovery, hotkeys and combat; War Sails additionally requires ship and fleet checks. Historical executable IL and gameplay were not verified and older versions are excluded. Static or regression checks and a menu load do not substitute for a campaign playtest.
 
 Supported reference: `1.5.3.122374-beta`, Steam build 25302170, paired with War Sails v1.3.3. The no-War-Sails package has no NavalDLC dependency and omits naval code/settings.
+
+To finish the runtime gate, test each edition separately using the clean module stacks in `Properties/launchSettings.json`:
+
+1. Start a new non-Ironman Sandbox campaign and open UFO's MCM settings. Verify the naval settings group exists only in the War Sails edition and no failed-patch inquiry appears.
+2. Change the campaign perk scope, advance campaign time, save under a new test name and reload. Check that the saved scope persists, including an explicit `No` choice, and that hotkeys still work after leaving and re-entering the campaign.
+3. Smoke-test land combat, XP and daily healing. For War Sails, also check ship/fleet controls and generic speed, food, wage and healing settings while at sea.
+4. Record the outcomes and any error reports against the audited DLL hashes in `Tools/Release/Verification-1.0.19.json` before uploading private Workshop items.
 
 ## Distribution
 
