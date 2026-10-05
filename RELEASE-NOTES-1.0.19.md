@@ -20,19 +20,25 @@ Completed against the final v1.5.3-only binaries:
 - Live v1.5.3 IL inspection validated nine War Sails implementation contracts and one no-War-Sails healing contract.
 - Each staged package had its expected module ID, module version `v1.0.19`, assembly version `1.0.19.0`, full source content and only `UFO.dll` as a binary.
 
-Both final editions reached the v1.5.3 main menu, and game logs showed no UFO diagnostic errors. The no-War-Sails launch omitted NavalDLC. Both final editions were rebuilt against the v1.5.3 baseline, passed the final checks and were installed in their new module folders. Campaign testing is pending because computer screen capture is currently unavailable through the automation tools. Remaining runtime checks cover MCM initialization, a new campaign, save/reload perk recovery, hotkeys and combat; War Sails additionally requires ship and fleet checks. Historical executable IL and gameplay were not verified and older versions are excluded. Static or regression checks and a menu load do not substitute for a campaign playtest.
+Both final editions reached the v1.5.3 main menu, and game logs showed no UFO diagnostic errors. The no-War-Sails launch omitted NavalDLC. Both final editions were rebuilt against the v1.5.3 baseline, passed the final checks and were installed in their new module folders. The publishing user confirmed successful playtesting on **2026-10-04**, satisfying the campaign runtime gate and authorizing publication. This records the user's confirmation rather than an automated observation of every gameplay feature. Historical executable IL and gameplay were not verified and older versions are excluded; exhaustive gameplay coverage is not claimed.
 
 Supported reference: `1.5.3.122374-beta`, Steam build 25302170, paired with War Sails v1.3.3. The no-War-Sails package has no NavalDLC dependency and omits naval code/settings.
 
-To finish the runtime gate, test each edition separately using the clean module stacks in `Properties/launchSettings.json`:
+For future regression playtests, test each edition separately using the clean module stacks in `Properties/launchSettings.json`:
 
 1. Start a new non-Ironman Sandbox campaign and open UFO's MCM settings. Verify the naval settings group exists only in the War Sails edition and no failed-patch inquiry appears.
 2. Change the campaign perk scope, advance campaign time, save under a new test name and reload. Check that the saved scope persists, including an explicit `No` choice, and that hotkeys still work after leaving and re-entering the campaign.
 3. Smoke-test land combat, XP and daily healing. For War Sails, also check ship/fleet controls and generic speed, food, wage and healing settings while at sea.
-4. Record the outcomes and any error reports against the audited DLL hashes in `Tools/Release/Verification-1.0.19.json` before uploading private Workshop items.
+4. Record future outcomes and any error reports against the audited DLL hashes in `Tools/Release/Verification-1.0.19.json`.
 
 ## Distribution
 
-Workshop creation and publication are pending the runtime checks. A candidate source branch upload is separate from Workshop distribution. After the runtime checks pass, create two new private items, verify their content and IDs, then publish them. Never overwrite the original author's item or previous 1.4.7/1.4.8 items. New IDs, payload verification and final public visibility must be recorded before describing publication as complete.
+The campaign runtime gate is satisfied by the user's confirmed playtest. Both editions were published on **2026-10-04** (America/New_York): [War Sails 3813768338](https://steamcommunity.com/sharedfiles/filedetails/?id=3813768338) and [No War Sails 3813768472](https://steamcommunity.com/sharedfiles/filedetails/?id=3813768472). Both official public-update uploader runs reported `Uploading done!` and exited successfully. Fresh Steam metadata confirmed public visibility, and fresh downloads matched all 26 files per edition by relative path, size and SHA256 with no missing, extra or differing files. DLL and archive hashes are unchanged.
+
+Both items require [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2859188632), [UIExtenderEx](https://steamcommunity.com/sharedfiles/filedetails/?id=2859222409), [ButterLib](https://steamcommunity.com/sharedfiles/filedetails/?id=2859232415), and [Mod Configuration Menu v5](https://steamcommunity.com/sharedfiles/filedetails/?id=2859238197). War Sails also requires DLC app [2927200](https://store.steampowered.com/app/2927200/); the no-War-Sails item has no app dependencies. Fresh dependency queries verified those exact requirements. Cookie-free public-page checks returned HTTP 200 for both items and verified the titles, version scope, credits, testing date, four required items and uploaded previews, with the DLC requirement only on War Sails.
+
+Download verification used low-priority Steam UGC `DownloadItem(itemId, false)` without subscribing. The staged local and Steam packages are byte-identical, so a second campaign playtest solely for redistribution is unnecessary. The local ignored reports `artifacts/workshop/verify-WarSails-public.json`, `verify-NoWarSails-public.json` and `dependencies-public.json` provide detailed evidence; tracked `Tools/Release/Verification-1.0.19.json` summarizes their key facts and release hashes.
+
+Use the corresponding update template and its recorded ID for subsequent uploads; do not rerun creation. Source templates remain private as a safe default, and intended public updates require explicit `-Visibility Public`. Verify downloaded content and public visibility after each update. Never overwrite the original author's item or previous 1.4.7/1.4.8 items.
 
 All original bundle and mod credits remain with UFOdestiny and the original authors listed in the README.

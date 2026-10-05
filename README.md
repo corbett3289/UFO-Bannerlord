@@ -15,6 +15,8 @@ Enable only one UFO edition. The new module IDs preserve the existing 1.4.8 pack
 
 Use game-compatible releases of Harmony, ButterLib, UIExtenderEx and Mod Configuration Menu v5. Compilation pins Harmony 2.4.2, ButterLib 2.11.1, UIExtenderEx 2.13.2 and MCM 5.12.3. The current installation provides ButterLib 2.12.0; that version is not published as a NuGet package, so the published 2.11.1 API is the build baseline.
 
+Both Workshop items declare [Harmony](https://steamcommunity.com/sharedfiles/filedetails/?id=2859188632), [UIExtenderEx](https://steamcommunity.com/sharedfiles/filedetails/?id=2859222409), [ButterLib](https://steamcommunity.com/sharedfiles/filedetails/?id=2859232415), and [Mod Configuration Menu v5](https://steamcommunity.com/sharedfiles/filedetails/?id=2859238197) as required items. The War Sails edition also declares the [War Sails DLC](https://store.steampowered.com/app/2927200/); the no-War-Sails edition has no DLC requirement.
+
 ## Build and package
 
 The module targets .NET Framework 4.8 and C# 12. Build with a compatible .NET SDK; the repository's net10.0 audit tools require a .NET 10 SDK. Framework reference assemblies are restored from the exact `Microsoft.NETFramework.ReferenceAssemblies.net48` 1.0.3 package, so a machine-wide Framework targeting pack is unnecessary.
@@ -48,20 +50,27 @@ The public release supports this exact game/DLC pair:
 
 `Tools/ModuleDataAudit/Validate-ModuleData.ps1` validates XML registrations and content references against a game snapshot. The final source rebuild and verification results are recorded in the release notes.
 
-Both final editions compiled against the v1.5.3 baseline with zero warnings and errors, passed their final checks and were installed in their new module folders. Both final editions reached the v1.5.3 main menu, and game logs showed no UFO diagnostic errors. The no-War-Sails launch omitted NavalDLC. Remaining runtime smoke tests are pending; computer screen capture is currently unavailable, blocking campaign testing through the automation tools. Outcomes and audited hashes are recorded in `RELEASE-NOTES-1.0.19.md` and `Tools/Release/Verification-1.0.19.json`. A successful build, static audit or menu load is not a campaign playtest. Runtime checks must cover MCM initialization, a new campaign, save/reload perk recovery, hotkeys and combat; the War Sails edition additionally needs ship and fleet checks. Workshop creation and publication remain pending those checks. A candidate source branch can be uploaded separately without implying a Workshop release.
+Both final editions compiled against the v1.5.3 baseline with zero warnings and errors, passed their final checks and were installed in their new module folders. Both reached the v1.5.3 main menu, and game logs showed no UFO diagnostic errors. The no-War-Sails launch omitted NavalDLC. The publishing user confirmed successful playtesting on **2026-10-04**, satisfying the campaign runtime gate and authorizing publication. Both editions were published that day. Fresh Steam downloads matched all 26 files per edition by relative path, size and SHA256; public metadata, dependencies and anonymous item pages were also verified. Outcomes and unchanged DLL/archive hashes are recorded in `RELEASE-NOTES-1.0.19.md` and `Tools/Release/Verification-1.0.19.json`. This user-confirmed playtest does not establish exhaustive gameplay coverage or compatibility with historical versions.
 
 Primary version provenance: [BUTR reference packages](https://www.nuget.org/packages/Bannerlord.ReferenceAssemblies), [client build registry](https://github.com/BUTR/Bannerlord.ReferenceAssemblies/blob/master/builds/261550.json), and [TaleWorlds beta hotfix notes](https://steamcommunity.com/app/261550/discussions/0/3762228679799915128/).
 
 ## Steam Workshop release
 
-The four `SteamWorkshop/Workshop{Create,Update}{WarSails,NoWarSails}15.xml` files describe **new Bannerlord v1.5.3** items and initially use private visibility. Older descriptors target older releases and must not be used for this publication.
+The two **Bannerlord v1.5.3** items were published on **2026-10-04**. Their public visibility and complete downloaded payloads are verified:
+
+| Edition | Workshop item | Current visibility |
+| --- | --- | --- |
+| War Sails | [3813768338](https://steamcommunity.com/sharedfiles/filedetails/?id=3813768338) | Public |
+| No War Sails | [3813768472](https://steamcommunity.com/sharedfiles/filedetails/?id=3813768472) | Public |
+
+Use the corresponding `WorkshopUpdate{WarSails,NoWarSails}15.xml` template to update these existing items. Source templates retain private visibility as a safe default; future intended public updates must explicitly use `-Visibility Public`. The create templates are retained as records of initial creation; rerunning them would create duplicates. Older descriptors target older releases and must not be used for this publication.
 
 ```powershell
-./Tools/Release/Prepare-Workshop.ps1 -Edition WarSails -ModuleRoot './artifacts/packages/UFO15'
-./Tools/Release/Prepare-Workshop.ps1 -Edition NoWarSails -ModuleRoot './artifacts/packages/UFONoWarSails15'
+./Tools/Release/Prepare-Workshop.ps1 -Edition WarSails -ModuleRoot './artifacts/packages/UFO15' -ItemId 3813768338 -Visibility Public
+./Tools/Release/Prepare-Workshop.ps1 -Edition NoWarSails -ModuleRoot './artifacts/packages/UFONoWarSails15' -ItemId 3813768472 -Visibility Public
 ```
 
-This prepares descriptors only. After checks pass, create the two private items using Bannerlord's official `TaleWorlds.MountAndBlade.SteamWorkshop.exe`. Record each returned ID, verify its payload, then prepare a public update with `-ItemId <new-id> -Visibility Public`. `Prepare-Workshop.ps1` rejects original and previous UFO item IDs. The uploader requires a signed-in owning Steam account and Steam Cloud enabled. Verify the item and content after uploading: the uploader can finish an upload before failing during redirected-console shutdown. A local module folder takes precedence over the Workshop copy when testing.
+This prepares update descriptors only. For a future release, complete its checks before uploading through Bannerlord's official `TaleWorlds.MountAndBlade.SteamWorkshop.exe`. `Prepare-Workshop.ps1` rejects original and previous UFO item IDs. The uploader requires a signed-in owning Steam account and Steam Cloud enabled. Verify metadata and downloaded content after uploading: the uploader can finish an upload before failing during redirected-console shutdown.
 
 The 1.5 descriptors use `SteamWorkshop/image15.png`; descriptor preparation requires that preview to exist and be smaller than 1 MB. Keep the new edition title, supported versions, dependencies, testing status and credits in the item's description. [Official publishing documentation](https://moddocs.bannerlord.com/steam-workshop/uploading_updating_mod/)
 
@@ -69,11 +78,11 @@ Run the uploader from the game's `bin/Win64_Shipping_Client` directory with the 
 
 ```powershell
 Set-Location -LiteralPath 'C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord\bin\Win64_Shipping_Client'
-& './TaleWorlds.MountAndBlade.SteamWorkshop.exe' 'C:\UFO-Bannerlord\artifacts\workshop\CreateWarSails15.xml'
-& './TaleWorlds.MountAndBlade.SteamWorkshop.exe' 'C:\UFO-Bannerlord\artifacts\workshop\CreateNoWarSails15.xml'
+& './TaleWorlds.MountAndBlade.SteamWorkshop.exe' 'C:\UFO-Bannerlord\artifacts\workshop\UpdateWarSails15.xml'
+& './TaleWorlds.MountAndBlade.SteamWorkshop.exe' 'C:\UFO-Bannerlord\artifacts\workshop\UpdateNoWarSails15.xml'
 ```
 
-Keep Steam running and signed in to the publishing account. Confirm each new item on that account's Workshop page and record its ID before running another create command; retrying creation can make a duplicate item. Check its title, private visibility, preview, description and supported-version tags. Subscribe, let Steam finish downloading, and compare the downloaded `SubModule.xml`, `UFO.dll` SHA256 and content file list with the staged edition. Test the downloaded copy with the local edition folder temporarily moved out of `Modules`, then restore it. After those checks, prepare and run the matching `UpdateWarSails15.xml` or `UpdateNoWarSails15.xml` descriptor with the confirmed ID and public visibility, and verify the public page before claiming publication.
+Keep Steam running and signed in to the publishing account. Check each item's title, intended visibility, preview, description, supported-version tag and required dependencies. Request a low-priority Steam UGC `DownloadItem(itemId, false)` without subscribing, wait for installation to complete, then compare the full relative file tree, every file's size and SHA256 with the staged edition, including missing or extra files. The v1.0.19 downloads matched all 26 files for each edition with zero differences. The staged local packages and downloaded packages are byte-identical, so no second campaign playtest is needed solely for redistribution. Verify public metadata and the anonymous public pages after a public update. Local reports under `artifacts/workshop/` are ignored build artifacts; their key facts are summarized in tracked `Tools/Release/Verification-1.0.19.json`.
 
 ## Maintained behavior
 
