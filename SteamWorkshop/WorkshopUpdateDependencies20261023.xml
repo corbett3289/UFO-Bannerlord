@@ -1,0 +1,17 @@
+<Tasks>
+  <GetItem>
+    <ItemId Value="3768535938" />
+  </GetItem>
+  <UpdateItem>
+    <ModuleFolder Value="C:\UFO-Bannerlord\artifacts\dependency-refresh-20261023\packages\UFONoWarSails" />
+    <ItemDescription Value="[h1]Dependency update - 23 October 2026[/h1]&#xA;&#xA;For Bannerlord v1.4.7. This item retains UFO v1.0.15.&#xA;Current requirements: Bannerlord.Harmony 2.4.2.248 (Harmony core 2.4.2), ButterLib 2.12.0, UIExtenderEx 3.0.3, and Mod Configuration Menu v5 5.13.1.&#xA;Dependency API compatibility checked. This update changes dependency metadata only; the published UFO DLLs and game content are unchanged. Enable only one UFO edition.&#xA;&#xA;[hr]&#xA;&#xA;[h1]UFO's Cheat Mods Bundle [1.4.7] - No War Sails[/h1]&#xA;&#xA;[b]No War Sails / NavalDLC required.[/b]&#xA;&#xA;This is a separate edition of the maintained UFO's Cheat Mods Bundle for players who do not own or use War Sails. It contains the complete feature set and compatibility fixes from the Bannerlord 1.4.7 update while removing the NavalDLC dependency.&#xA;&#xA;[b]Testing note[/b]&#xA;I use the War Sails edition, so this no-War-Sails variant has not been gameplay-tested by me. It builds successfully without any NavalDLC assembly or dependency and should theoretically work, but please treat it as an early test release. Do not enable this edition and the War Sails edition at the same time.&#xA;&#xA;[h1]Dependencies[/h1]&#xA;Harmony&#xA;ButterLib&#xA;UIExtenderEx&#xA;Mod Configuration Menu v5&#xA;&#xA;[h1]Credits[/h1]&#xA;All credit for the original mod and bundled work belongs to UFOdestiny and the original credited authors. This is only a Codex-led compatibility and maintenance update for Bannerlord 1.4.7.&#xA;&#xA;Original UFO GitHub: https://github.com/UFOdestiny/UFO-Bannerlord&#xA;Original UFO Workshop mod: https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039&#xA;Maintained War Sails edition: https://steamcommunity.com/sharedfiles/filedetails/?id=3767139118&#xA;&#xA;Original bundled mods:&#xA;Bannerlord Cheats Reload: https://www.nexusmods.com/mountandblade2bannerlord/mods/6446&#xA;Xorberax's Legacy: https://www.nexusmods.com/mountandblade2bannerlord/mods/3462&#xA;Hero Enhancement: https://www.nexusmods.com/mountandblade2bannerlord/mods/4827&#xA;Recruit Exile Clans: https://steamcommunity.com/sharedfiles/filedetails/?id=3255329103&#xA;Keep Your Daughters: https://www.nexusmods.com/mountandblade2bannerlord/mods/5148&#xA;Super Throwing Collection: https://steamcommunity.com/sharedfiles/filedetails/?id=2885230883&#xA;loongspear: https://steamcommunity.com/sharedfiles/filedetails/?id=3017866291&#xA;Super OP Arrows: https://bbs.mountblade.com.cn/download_1580.html&#xA;&#xA;[h1]Bug reports[/h1]&#xA;Please report bugs and crashes in the comments. Include when the problem happened, which cheat or setting was involved, and any crash identifier or report details so I can try to fix it." />
+    <ChangeNotes Value="Dependency refresh (2026-10-23): Harmony 2.4.2.248, ButterLib 2.12.0, UIExtenderEx 3.0.3, MCM v5 5.13.1. Existing UFO DLLs, content, module version, and Bannerlord 1.4.7 support preserved." />
+    <Tags>
+      <Tag Value="Utility" />
+      <Tag Value="Singleplayer" />
+      <Tag Value="1.4.7" />
+    </Tags>
+    <Image Value="C:\UFO-Bannerlord\artifacts\dependency-refresh-20261023\previews\3768535938.png" />
+    <Visibility Value="Public" />
+  </UpdateItem>
+</Tasks>

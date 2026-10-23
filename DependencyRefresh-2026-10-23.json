@@ -1,0 +1,211 @@
+{
+  "updateDate": "2026-10-23",
+  "status": "published",
+  "scope": "Dependency metadata refresh; exact previously published UFO DLLs and assets retained.",
+  "branch": "without-dlc-1.4.7",
+  "bannerlordVersion": "1.4.7",
+  "moduleId": "UFONoWarSails",
+  "moduleVersion": "v1.0.15",
+  "workshopItemId": "3768535938",
+  "workshopUrl": "https://steamcommunity.com/sharedfiles/filedetails/?id=3768535938",
+  "visibility": "Public",
+  "officialUploaderResult": "Uploading done!; process exit code 0",
+  "anonymousServerMetadataVerified": true,
+  "serverContentManifestId": "8334238471121414537",
+  "serverPayloadBytes": 42457906,
+  "serverUpdatedUtc": "2026-10-23T12:02:36.0000000Z",
+  "dependencyMetadata": {
+    "Bannerlord.Harmony": "v2.4.2.248",
+    "Bannerlord.ButterLib": "v2.12.0",
+    "Bannerlord.UIExtenderEx": "v3.0.3.*",
+    "Bannerlord.MBOptionScreen": "v5.13.1"
+  },
+  "requiredWorkshopItemIds": [
+    2859188632,
+    2859222409,
+    2859232415,
+    2859238197
+  ],
+  "requiredSteamAppIds": [],
+  "dllAudit": {
+    "workshopItemId": "3768535938",
+    "edition": "No War Sails",
+    "bannerlordVersion": "1.4.7",
+    "assemblyVersion": "1.0.15.0",
+    "sha256": "E62A17D175B75F8877253DFA9775D0C52643638C234A3B51101C6B392019E996",
+    "frameworkTypeRefsPassed": 28,
+    "frameworkMemberRefsPassed": 43,
+    "concreteMcmInterfaceObligationsPassed": 37,
+    "missingContracts": 0
+  },
+  "auditedFrameworks": [
+    {
+      "name": "Bannerlord.Harmony",
+      "releaseVersion": "2.4.2.248",
+      "sourceUrl": "https://github.com/BUTR/Bannerlord.Harmony/releases/tag/v2.4.2.248",
+      "assemblyIdentity": "0Harmony, Version=2.4.2.0, Culture=neutral, PublicKeyToken=null",
+      "assemblySha256": "2EDDA13A18954B79795BAC0D7E0E8FDF0BFA05B96552D6056D90F446CD0A2AB2",
+      "bundleSha256": "097B69A8E9DD37252CEF1FA3EFF326BC69A9532CF0DC9E40784A1A572EA6E85B"
+    },
+    {
+      "name": "Bannerlord.UIExtenderEx",
+      "releaseVersion": "3.0.3",
+      "sourceUrl": "https://github.com/BUTR/Bannerlord.UIExtenderEx/releases/tag/v3.0.3",
+      "assemblyIdentity": "Bannerlord.UIExtenderEx, Version=3.0.3.0, Culture=neutral, PublicKeyToken=null",
+      "assemblySha256": "EDDDF83C0AA397822773EDB4EA7ADA65CCFF36356248767DDC0EF741BB37C368",
+      "bundleSha256": "8450D57C81B6B63952CAB62D87D2DE354CAC3FDA0D12980E36E75E8CCD6DAB05"
+    },
+    {
+      "name": "Bannerlord.ButterLib",
+      "releaseVersion": "2.12.0",
+      "sourceUrl": "https://github.com/BUTR/Bannerlord.ButterLib/releases/tag/v2.12.0",
+      "assemblyIdentity": "Bannerlord.ButterLib, Version=2.12.0.0, Culture=neutral, PublicKeyToken=null",
+      "assemblySha256": "CDFEACE71D2FA58F4A13748E98540524ACF8CB42B829D98692B2331AC35EDE3A",
+      "bundleSha256": "78CE51C40918E891585EEC04B3141B4CACD2CDD3C573D953773813E5E0D1BA4B"
+    },
+    {
+      "name": "Mod Configuration Menu v5",
+      "releaseVersion": "5.13.1",
+      "sourceUrl": "https://github.com/Aragas/Bannerlord.MBOptionScreen/releases/tag/v5.13.1",
+      "assemblyIdentity": "MCMv5, Version=5.13.1.0, Culture=neutral, PublicKeyToken=null",
+      "assemblySha256": "DE377B02F589D96C073D6C3592535A4823269499CF16BE09BB1BDC74BFD0009D",
+      "bundleSha256": "C93828D37F6E40AB4A1B556E70B0A3B5F926EAA3B4EE6F212324408EF343ED03"
+    }
+  ],
+  "previousManifestSha256": "F8FD7C3D7C171CB07D1E40EE7DE0F150737921FE3E1CDD411021B3056AD82C87",
+  "publishedManifestSha256": "7323B302A0822557DFCFF92AEB426851B4EF7183EEC7563D7DD617D99448998C",
+  "changedPayloadFiles": [
+    "SubModule.xml"
+  ],
+  "unchangedPayloadFiles": 22,
+  "downloadedPayloadVerification": {
+    "passed": false,
+    "checkedUtc": "2026-10-23T12:04:44.7533885Z",
+    "fileCount": 23,
+    "differences": 1,
+    "status": "pending; Steam client still selects the previously installed content manifest",
+    "cachedOldManifestOnly": true,
+    "method": "Low-priority Steam UGC DownloadItem without subscription changes; every path, byte length, and SHA256 compared with the frozen staged package."
+  },
+  "historicalGameplayRetested": false,
+  "runtimeScope": "No new campaign/UI/gameplay test is claimed; existing gameplay binaries and game-specific requirements were preserved.",
+  "publicPageVerificationReport": "artifacts/dependency-refresh-20261023/reports/public-pages-after.json",
+  "localDetailedEvidenceRoot": "C:\\Users\\corbe\\.codex\\tmp\\ufo-dependencies-20261023",
+  "stagedUploadFiles": [
+    {
+      "path": "AssetPackages/pack0.tpac",
+      "bytes": 40494526,
+      "sha256": "2AEAC45ECB41F16729AADB64136F0890915B9F9D0F44C1E121D74B4772A2BC0D"
+    },
+    {
+      "path": "bin/Win64_Shipping_Client/Chinese.resx",
+      "bytes": 69008,
+      "sha256": "96D1B8958175ECE028C8F9790E111C2AEB3D9C3990B0443F40EA19E966244BED"
+    },
+    {
+      "path": "bin/Win64_Shipping_Client/English.resx",
+      "bytes": 74073,
+      "sha256": "B7B52A20277120E32DB89670B652400830A31BFBF40BEF0B702B152BE708C621"
+    },
+    {
+      "path": "bin/Win64_Shipping_Client/Other.resx",
+      "bytes": 74073,
+      "sha256": "B7B52A20277120E32DB89670B652400830A31BFBF40BEF0B702B152BE708C621"
+    },
+    {
+      "path": "bin/Win64_Shipping_Client/UFO.dll",
+      "bytes": 274432,
+      "sha256": "E62A17D175B75F8877253DFA9775D0C52643638C234A3B51101C6B392019E996"
+    },
+    {
+      "path": "bin/Win64_Shipping_Client/UFO.pdb",
+      "bytes": 880128,
+      "sha256": "43F5172AE15A55E4BDFD4E9AE1C41D5ECC33D8460C7E4EF91603D2441E88C730"
+    },
+    {
+      "path": "ModuleData/CraftingPieces/javelin_pieces.xml",
+      "bytes": 847,
+      "sha256": "F23495B04A4BE571F8773948E3E47EB1C86517F72BA57E71C6B557470B0F4FEB"
+    },
+    {
+      "path": "ModuleData/CraftingPieces/loongspear_pieces.xml",
+      "bytes": 1394,
+      "sha256": "638E076D881ED5754BAF4B0044AA3B802BA3A231CA0C486BC196EA1B1194C923"
+    },
+    {
+      "path": "ModuleData/CraftingTemplates/javelin_templates.xml",
+      "bytes": 2048,
+      "sha256": "2DA2A25B2D89DBBA1CD8793BBA1FDB25CC839611F6098297633D00EC389B22B0"
+    },
+    {
+      "path": "ModuleData/CraftingTemplates/loongspear_templates.xml",
+      "bytes": 1588,
+      "sha256": "6EF29FF9C40F1116CB28DE7C56DECEA1A57AB145B8D4C7D88D9348458F9342A3"
+    },
+    {
+      "path": "ModuleData/Items/arrow.xml",
+      "bytes": 30457,
+      "sha256": "1187E1B391C47074F0A718CD8B53FCBE80CB45A88F966306A60C96B6E858A24A"
+    },
+    {
+      "path": "ModuleData/Items/javelin.xml",
+      "bytes": 664,
+      "sha256": "3378F43214A3AFE9AAABD2642E2A3AE74FF7E8FF56438CB553840E4B023F793A"
+    },
+    {
+      "path": "ModuleData/Items/loongspear.xml",
+      "bytes": 569,
+      "sha256": "5B435B4CD33309464F9A8A5F0A4AE9488773C00434B1D219DDEAF12202E20DF4"
+    },
+    {
+      "path": "ModuleData/Languages/CNs/item-zho-CN.xml",
+      "bytes": 1673,
+      "sha256": "53B4AA069A89EBDF7A077C7050C74223DBDB9834A029C476065B01EBF7E22635"
+    },
+    {
+      "path": "ModuleData/Languages/CNs/language_data.xml",
+      "bytes": 502,
+      "sha256": "EAF718D413398292ADEDCFF12C710052A88CC31D48C3468ED4CB02663CE2D79C"
+    },
+    {
+      "path": "ModuleData/Languages/CNs/module_strings.xml",
+      "bytes": 639,
+      "sha256": "19924F0F92F33553AE3C317322BB87545B2FBE73E2253085EC0CFD17281D34A4"
+    },
+    {
+      "path": "ModuleData/WeaponDescriptions/javelin_descriptions.xml",
+      "bytes": 1369,
+      "sha256": "B2357E58EB3533016452A64E5E50D2E65DCCAE35BB4FCA9F926AA3C5E0D8AAD5"
+    },
+    {
+      "path": "ModuleData/WeaponDescriptions/loongspear_descriptions.xml",
+      "bytes": 2339,
+      "sha256": "D54FB87F2E68B87E4508DD8DACCF54C72081E0C6AAD25870D43383E0F81DBDE5"
+    },
+    {
+      "path": "SubModule.xml",
+      "bytes": 5156,
+      "sha256": "7323B302A0822557DFCFF92AEB426851B4EF7183EEC7563D7DD617D99448998C"
+    },
+    {
+      "path": "Video/README.md",
+      "bytes": 107,
+      "sha256": "7F2F5C042227E9D236492C9E72247B95BE6BB47A1B90EE1D95A144F1461135C3"
+    },
+    {
+      "path": "Video/TWLogo_and_Partners.ivf",
+      "bytes": 448464,
+      "sha256": "D3C0F9B797E3F499EED76F80231482F89EE5B5780544B88EC13156F75513A3E9"
+    },
+    {
+      "path": "Video/TWLogo_and_Partners.mp4",
+      "bytes": 88548,
+      "sha256": "B80E3858A712CF67E97304A87EB57D96E1D2456DD711DFEFF8385705BF92359E"
+    },
+    {
+      "path": "Video/TWLogo_and_Partners.ogg",
+      "bytes": 5302,
+      "sha256": "2171B6AE630729F8DAA89ABF6D3B0ED5164AC0B774D1D3F706C750F7EA135A82"
+    }
+  ]
+}

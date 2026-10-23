@@ -31,3 +31,18 @@ I want to give full credit to the original authors of the mods.
 
 # Setting Fixes
 - As of v1.0.13, this edition includes the maintained battle-cleanup, max-attribute, XP/learning, both-perks, and MCM Global-tab fixes from the War Sails edition while retaining a completely separate no-NavalDLC package.
+
+
+## Dependency refresh - 2026-10-23
+
+This edition supports the current dependency releases: Harmony module 2.4.2.248 (core 2.4.2), ButterLib 2.12.0, UIExtenderEx 3.0.3, and MCM v5 5.13.1.
+
+The update preserves the existing published UFO DLLs, assets, module version and Bannerlord 1.4.7 game/DLC requirements. Its dependency metadata is refreshed without rebuilding against a different game version.
+
+Each published DLL passed 43 framework member references, 37 concrete MCM interface obligations, and 27 or 28 framework type references against the current official releases, with zero missing contracts. This is a dependency API audit, not a new historical campaign playtest.
+
+Workshop item: https://steamcommunity.com/sharedfiles/filedetails/?id=3768535938
+Use SteamWorkshop/WorkshopUpdateDependencies20261023.xml for this update. It targets this exact existing item and the verified staged package under artifacts/dependency-refresh-20261023; do not use another edition's descriptor.
+See DependencyRefresh-2026-10-23.json for the exact hashes and final publication verification.
+
+Published on 2026-10-23. Official uploader completion, fresh public metadata, new server content manifest ID and exact payload byte count were verified. All four framework requirement links are present; War Sails editions also declare the DLC, and no-War-Sails editions have no DLC requirement. Fresh-download verification is pending: the Steam client still selects its previous content manifest. Its 22 unchanged files match, while the cached SubModule.xml is still the old version. No fresh-download pass or new historical gameplay test is claimed.
