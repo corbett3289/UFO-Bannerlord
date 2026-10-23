@@ -20,10 +20,10 @@
 		<DependedModule Id="CustomBattle" />
 	</DependedModules>
 	<DependedModuleMetadatas>
-		<DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" version="v2.4.2.*"/>
-		<DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" version="v2.11.0"/>
-		<DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" version="v2.13.2.*"/>
-		<DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v5.12.1"/>
+		<DependedModuleMetadata id="Bannerlord.Harmony" order="LoadBeforeThis" version="v2.4.2.248"/>
+		<DependedModuleMetadata id="Bannerlord.ButterLib" order="LoadBeforeThis" version="v2.12.0"/>
+		<DependedModuleMetadata id="Bannerlord.UIExtenderEx" order="LoadBeforeThis" version="v3.0.3.*"/>
+		<DependedModuleMetadata id="Bannerlord.MBOptionScreen" order="LoadBeforeThis" version="v5.13.1"/>
 		<DependedModuleMetadata id="Native" order="LoadBeforeThis" version="v1.4.8.*"/>
 		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="v1.4.8.*"/>
 		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="v1.4.8.*"/>
