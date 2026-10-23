@@ -25,6 +25,11 @@ internal class SubModule : MBSubModuleBase
 
     internal static bool CampaignReady { get; private set; }
 
+    internal static void MarkCampaignReady()
+    {
+        CampaignReady = Campaign.Current != null && Hero.MainHero != null;
+    }
+
     protected override void OnSubModuleLoad()
     {
         base.OnSubModuleLoad();
@@ -87,7 +92,7 @@ internal class SubModule : MBSubModuleBase
         // Harmony patches can remain active while Bannerlord replaces or reloads a
         // campaign. OnGameStart clears this flag, so restore it even when no repatch
         // is required for the newly loaded campaign.
-        CampaignReady = true;
+        MarkCampaignReady();
 
         //PatchInspector.PatchInformation();
 

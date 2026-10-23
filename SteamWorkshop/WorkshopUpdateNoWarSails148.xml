@@ -4,7 +4,7 @@
 	</GetItem>
 	<UpdateItem>
 		<ModuleFolder Value="C:\UFO-Bannerlord\Module"/>
-		<ChangeNotes Value="Initial v1.0.16 no-War-Sails compatibility release for Bannerlord v1.4.8. NavalDLC is not required or referenced."/>
+		<ChangeNotes Value="v1.0.18 fixes the Ctrl+A Set All Attributes hotkey crashing on character screens supplied or extended by other UI mods. UFO now resolves inherited and alternate compatible view-model fields safely, and the related character, inventory, and party hotkeys exit cleanly when a screen has no compatible view model. NavalDLC remains neither required nor referenced."/>
 		<Tags>
 			<Tag Value="Utility"/>
 			<Tag Value="Singleplayer"/>
