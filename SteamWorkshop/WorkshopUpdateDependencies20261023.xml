@@ -1,0 +1,17 @@
+<Tasks>
+  <GetItem>
+    <ItemId Value="3767139118" />
+  </GetItem>
+  <UpdateItem>
+    <ModuleFolder Value="C:\UFO-Bannerlord\artifacts\dependency-refresh-20261023\packages\UFO" />
+    <ItemDescription Value="[h1]Dependency update - 23 October 2026[/h1]&#xA;&#xA;For Bannerlord v1.4.7. This item retains UFO v1.0.15.&#xA;Current requirements: Bannerlord.Harmony 2.4.2.248 (Harmony core 2.4.2), ButterLib 2.12.0, UIExtenderEx 3.0.3, and Mod Configuration Menu v5 5.13.1.&#xA;Dependency API compatibility checked. This update changes dependency metadata only; the published UFO DLLs and game content are unchanged. Enable only one UFO edition.&#xA;&#xA;[hr]&#xA;&#xA;1.4.8: https://steamcommunity.com/sharedfiles/filedetails/?id=3781136815&#xD;&#xA;&#xD;&#xA;UFO's Cheat Mods Bundle - Codex compatibility update for Bannerlord v1.4.7. All credit for the original mod goes to UFOdestiny and the original credited mod authors. This upload is only a maintenance/update build so I can use the mod on the current game version and Steam Deck. Original GitHub: https://github.com/UFOdestiny/UFO-Bannerlord Original Steam Workshop item: https://steamcommunity.com/sharedfiles/filedetails/?id=3583201039 Changes in this fork: updated dependency metadata for Bannerlord v1.4.7, added War Sails/NavalDLC load ordering, rebuilt against local v1.4.7 assemblies, fixed reward multiplier Harmony signatures, fixed the workshop production runtime crash, and fixed a StoryMode new-game crash in hero enhancement startup.&#xD;&#xA;&#xD;&#xA;Comment an issue and AI will attempt to fix it. Provide a crash log and AI will fix it. Enjoy and have fun." />
+    <ChangeNotes Value="Dependency refresh (2026-10-23): Harmony 2.4.2.248, ButterLib 2.12.0, UIExtenderEx 3.0.3, MCM v5 5.13.1. Existing UFO DLLs, content, module version, and Bannerlord 1.4.7 support preserved." />
+    <Tags>
+      <Tag Value="Utility" />
+      <Tag Value="Singleplayer" />
+      <Tag Value="1.4.7" />
+    </Tags>
+    <Image Value="C:\UFO-Bannerlord\artifacts\dependency-refresh-20261023\previews\3767139118.png" />
+    <Visibility Value="Public" />
+  </UpdateItem>
+</Tasks>
